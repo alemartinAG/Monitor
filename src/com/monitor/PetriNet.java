@@ -26,6 +26,7 @@ public class PetriNet {
     private int nTransitions = 0;
 
     private ArrayList<String> tableList;
+    private Integer[][] combinedIMatrix;
 
     public PetriNet(){
 
@@ -60,7 +61,16 @@ public class PetriNet {
 
         countPT();
 
-        parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
+        combinedIMatrix = parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
+
+        for(int i=0; i<combinedIMatrix.length; i++){
+            for(int j=0; j<combinedIMatrix[i].length; j++){
+                System.out.printf("%3d ",combinedIMatrix[i][j]);
+            }
+            System.out.println("");
+        }
+
+
     }
 
     private void countPT(){
@@ -85,26 +95,23 @@ public class PetriNet {
         nPlaces = p;
         nTransitions = t;
 
-        System.out.println("sdadsdaad de Plazas = "+ String.valueOf(nPlaces));
-        System.out.println("Cantidad de Transiciones = "+ String.valueOf(nTransitions));
     }
 
-    private void parseMatrix(String plainText, int rows, int columns){
+    private Integer[][] parseMatrix(String plainText, int rows, int columns){
 
-        System.out.println(plainText);
+        Integer[][] matrix = new Integer[rows][columns];
 
         Pattern pattern = Pattern.compile("\\s-?\\d+");
         Matcher matcher = pattern.matcher(plainText);
 
-        for(int j=0; j<rows; j++){
-            for(int i=0; i<columns; i++){
+        for(int i=0; i<rows; i++){
+            for(int j=0; j<columns; j++){
                 matcher.find();
-                System.out.print(matcher.group());
+                matrix[i][j] = Integer.parseInt(matcher.group().trim());
             }
-            System.out.println("");
         }
 
-        System.out.println("");
+        return matrix;
     }
 
 }
