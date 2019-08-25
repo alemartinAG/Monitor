@@ -26,12 +26,41 @@ public class main {
 
         System.out.println("\n\n\n---------\n\n\n");
 
-        Pattern numRegex = Pattern.compile("\\s\\d+");
-        Matcher match = numRegex.matcher(firstTable.text());
+        Pattern pattern = Pattern.compile("P\\d");
+        Matcher matcher = pattern.matcher(firstTable.text());
 
-        while(match.find()) {
-            System.out.println(match.group());
+        int nPlaces = 0;
+        int nTrans = 0;
+
+        while (matcher.find()) {
+            nPlaces++;
         }
+
+        pattern = Pattern.compile("T\\d");
+        matcher = pattern.matcher(firstTable.text());
+
+        while (matcher.find()){
+            nTrans++;
+        }
+
+        pattern = Pattern.compile("\\s\\d+");
+        matcher = pattern.matcher(firstTable.text());
+
+        for(int j=0; j<nPlaces; j++){
+
+            for(int i=0; i<nTrans; i++){
+                matcher.find();
+                System.out.print(matcher.group()+" ");
+            }
+
+            System.out.println("");
+        }
+
+
+        System.out.println("Cantidad de Plazas = "+ String.valueOf(nPlaces));
+        System.out.println("Cantidad de Transiciones = "+ String.valueOf(nTrans));
+
+
 
 
     }
