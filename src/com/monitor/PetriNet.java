@@ -30,7 +30,7 @@ public class PetriNet {
 
     public PetriNet(){
 
-        File input = new File("/home/ale/Desktop/papa.html"); //get env $HOME
+        File input = new File("/home/ale/Desktop/p-c.html"); //get env $HOME
 
         Document doc = null;
         Elements tables = null;
