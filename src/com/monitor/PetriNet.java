@@ -7,9 +7,6 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,10 +30,36 @@ public class PetriNet {
 
     public PetriNet(){
 
-        //ClassLoader classLoader = getClass().getClassLoader();
+        getTableList();
 
-        //File input = new File(classLoader.getResource("res/petri.html").getFile());
+        countPT();
 
+        combinedIMatrix = parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
+
+        /*for(int i=0; i<combinedIMatrix.length; i++){
+            for(int j=0; j<combinedIMatrix[i].length; j++){
+                System.out.printf("%3d ",combinedIMatrix[i][j]);
+            }
+            System.out.println("");
+        }*/
+
+    }
+
+    public boolean[] areEnabled(){
+
+        boolean[] enabledTransitions = new boolean[nTransitions];
+
+        for(int t=0; t<nTransitions; t++){
+            for(int p=0; p<nPlaces; p++){
+                //Ver condiciones de sensibilizado
+            }
+        }
+
+        return enabledTransitions;
+
+    }
+
+    private void getTableList(){
 
         File input = new File("res/petri.html");
 
@@ -66,18 +89,6 @@ public class PetriNet {
 
             nTable++;
         }
-
-        countPT();
-
-        combinedIMatrix = parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
-
-        for(int i=0; i<combinedIMatrix.length; i++){
-            for(int j=0; j<combinedIMatrix[i].length; j++){
-                System.out.printf("%3d ",combinedIMatrix[i][j]);
-            }
-            System.out.println("");
-        }
-
 
     }
 
