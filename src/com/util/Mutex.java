@@ -10,6 +10,7 @@ public class Mutex {
     public boolean acquire(){
 
         try {
+
             semaphore.acquire();
 
             return true;

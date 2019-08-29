@@ -7,6 +7,9 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,7 +33,12 @@ public class PetriNet {
 
     public PetriNet(){
 
-        File input = new File("/home/ale/Desktop/p-c.html"); //get env $HOME
+        //ClassLoader classLoader = getClass().getClassLoader();
+
+        //File input = new File(classLoader.getResource("res/petri.html").getFile());
+
+
+        File input = new File("res/petri.html");
 
         Document doc = null;
         Elements tables = null;
