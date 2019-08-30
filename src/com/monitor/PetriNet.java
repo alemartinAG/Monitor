@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,26 +23,67 @@ public class PetriNet {
     private static final int MRK = 4; // Marking
     private static final int ETR = 5; // Enabled Transitions
 
+    private static final String PETRI = "res/petri.html";
+
     private int nPlaces = 0;
     private int nTransitions = 0;
 
     private ArrayList<String> tableList;
     private Integer[][] combinedIMatrix;
+    private Integer[][] backwardMatrix;
+    private Integer[]   currentMarking;
+    private boolean[]   enabledTransitions;
 
     public PetriNet(){
 
-        getTableList();
+        tableList = getTableList(PETRI);
 
-        countPT();
+        countPlacesAndTransitions();
 
         combinedIMatrix = parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
+        backwardMatrix = parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
+        currentMarking = parseMatrix(tableList.get(MRK), nPlaces);
 
-        /*for(int i=0; i<combinedIMatrix.length; i++){
-            for(int j=0; j<combinedIMatrix[i].length; j++){
-                System.out.printf("%3d ",combinedIMatrix[i][j]);
+        System.out.print("Combined Incidence Matrix\n");
+        printMatrix(combinedIMatrix);
+        System.out.print("Backwards Incidence Matrix\n");
+        printMatrix(backwardMatrix);
+        System.out.print("Current Marking\n");
+        printMatrix(currentMarking);
+
+        System.out.print("Enabled Transitions: ");
+        enabledTransitions = areEnabled();
+        for(int i=0; i<enabledTransitions.length; i++){
+            System.out.printf(" | T%d: %s | ", i+1, enabledTransitions[i]);
+        }
+        System.out.print("\n\n");
+
+    }
+
+    private void printMatrix(Object[][] matrix){
+
+        System.out.print("\n");
+
+        for(int i=0; i<matrix.length; i++){
+            for(int j=0; j<matrix[i].length; j++){
+                System.out.printf("%3s ",matrix[i][j].toString());
             }
             System.out.println("");
-        }*/
+        }
+
+        System.out.print("\n");
+
+    }
+
+    private void printMatrix(Object[] matrix){
+
+        System.out.print("\n");
+
+        for(int i=0; i<matrix.length; i++){
+            System.out.printf("%3s ",matrix[i].toString());
+        }
+
+        System.out.print("\n\n");
 
     }
 
@@ -49,9 +91,14 @@ public class PetriNet {
 
         boolean[] enabledTransitions = new boolean[nTransitions];
 
+        Arrays.fill(enabledTransitions, true);
+
         for(int t=0; t<nTransitions; t++){
             for(int p=0; p<nPlaces; p++){
-                //Ver condiciones de sensibilizado
+                if (backwardMatrix[p][t] > this.currentMarking[p]) {
+                    enabledTransitions[t] = false;
+                    break;
+                }
             }
         }
 
@@ -59,13 +106,13 @@ public class PetriNet {
 
     }
 
-    private void getTableList(){
+    private ArrayList<String> getTableList(String petriFile){
 
-        File input = new File("res/petri.html");
+        File input = new File(petriFile);
 
         Document doc = null;
         Elements tables = null;
-        tableList = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
 
         try {
             doc = Jsoup.parse(input, "UTF-8", "");
@@ -84,15 +131,17 @@ public class PetriNet {
         for(Element table : tables){
 
             if(nTable%2 == 0){
-                tableList.add(table.text());
+                list.add(table.text());
             }
 
             nTable++;
         }
 
+        return  list;
+
     }
 
-    private void countPT(){
+    private void countPlacesAndTransitions(){
 
         int p = 0;
         int t = 0;
@@ -131,6 +180,22 @@ public class PetriNet {
         }
 
         return matrix;
+    }
+
+    private Integer[] parseMatrix(String plainText, int columns){
+
+        Integer[] matrix = new Integer[columns];
+
+        Pattern pattern = Pattern.compile("\\s-?\\d+");
+        Matcher matcher = pattern.matcher(plainText);
+
+        for(int j=0; j<columns; j++){
+            matcher.find();
+            matrix[j] = Integer.parseInt(matcher.group().trim());
+        }
+
+        return matrix;
+
     }
 
 }
