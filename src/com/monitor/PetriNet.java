@@ -31,18 +31,25 @@ public class PetriNet {
     private ArrayList<String> tableList;
     private Integer[][] combinedIMatrix;
     private Integer[][] backwardMatrix;
+    private Integer[][] forwardMatrix;
+    private Integer[][] inhibitionMatrix;
     private Integer[]   currentMarking;
     private boolean[]   enabledTransitions;
 
     public PetriNet(){
 
+        // Parseo el archivo .html de las matrices de la red de petri generado por PIPE
         tableList = getTableList(PETRI);
 
+        // Cuento la cantidad de plazas y transiciones
         countPlacesAndTransitions();
 
-        combinedIMatrix = parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
-        backwardMatrix = parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
-        currentMarking = parseMatrix(tableList.get(MRK), nPlaces);
+        /* Obtengo las matrices de enteros a partir de las lineas de texto generadas previamente */
+        combinedIMatrix     =   parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
+        backwardMatrix      =   parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
+        forwardMatrix       =   parseMatrix(tableList.get(FIM), nPlaces, nTransitions);
+        inhibitionMatrix    =   parseMatrix(tableList.get(INM), nPlaces, nTransitions);
+        currentMarking      =   parseMatrix(tableList.get(MRK), nPlaces);
 
         System.out.print("Combined Incidence Matrix\n");
         printMatrix(combinedIMatrix);
@@ -58,6 +65,10 @@ public class PetriNet {
         }
         System.out.print("\n\n");
 
+    }
+
+    public boolean trigger(){
+        return false;
     }
 
     private void printMatrix(Object[][] matrix){
@@ -101,6 +112,8 @@ public class PetriNet {
                 }
             }
         }
+
+        //TODO: ver matriz de inhibición
 
         return enabledTransitions;
 
