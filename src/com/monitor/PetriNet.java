@@ -1,5 +1,6 @@
 package com.monitor;
 
+import com.errors.IllegalTriggerException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -7,6 +8,7 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -23,16 +25,17 @@ public class PetriNet {
     private static final int MRK = 4; // Marking
     private static final int ETR = 5; // Enabled Transitions
 
-    private static final String PETRI = "res/petri.html";
+    private static final String PETRI = "res/petri.html"; // matrices file's path
 
-    private int nPlaces = 0;
-    private int nTransitions = 0;
+    private int nPlaces = 0;        // number of places in the petri net
+    private int nTransitions = 0;   // number of transitions in the petri net
 
     private ArrayList<String> tableList;
     private Integer[][] combinedIMatrix;
     private Integer[][] backwardMatrix;
     private Integer[][] forwardMatrix;
     private Integer[][] inhibitionMatrix;
+    private Integer[]   initalMarking;
     private Integer[]   currentMarking;
     private boolean[]   enabledTransitions;
 
@@ -49,14 +52,16 @@ public class PetriNet {
         backwardMatrix      =   parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
         forwardMatrix       =   parseMatrix(tableList.get(FIM), nPlaces, nTransitions);
         inhibitionMatrix    =   parseMatrix(tableList.get(INM), nPlaces, nTransitions);
-        currentMarking      =   parseMatrix(tableList.get(MRK), nPlaces);
+        initalMarking       =   parseMatrix(tableList.get(MRK), nPlaces);
+        currentMarking      =   initalMarking.clone();
 
+        //* Debugging
         System.out.print("Combined Incidence Matrix\n");
         printMatrix(combinedIMatrix);
         System.out.print("Backwards Incidence Matrix\n");
         printMatrix(backwardMatrix);
-        System.out.print("Current Marking\n");
-        printMatrix(currentMarking);
+        System.out.print("Initial Marking\n");
+        printMatrix(initalMarking);
 
         System.out.print("Enabled Transitions: ");
         enabledTransitions = areEnabled();
@@ -64,13 +69,41 @@ public class PetriNet {
             System.out.printf(" | T%d: %s | ", i+1, enabledTransitions[i]);
         }
         System.out.print("\n\n");
+        //*
 
     }
 
-    public boolean trigger(){
-        return false;
+    public boolean trigger(int transition) throws IllegalTriggerException {
+
+        /* Si la transición a disparar no se encuentra
+        sensibilizada se genera una excepción */
+        if(!areEnabled()[transition]){
+            throw new IllegalTriggerException(String.format("Not enabled transition (%d) has tried to trigger", transition+1));
+        }
+
+        /* Genero vector delta para calcular función de transferencia */
+        Integer[] delta = new Integer[nTransitions];
+        Arrays.fill(delta, 0);
+        delta[transition] = 1;
+
+        Integer tf[] = new Integer[nPlaces];
+        Arrays.fill(tf, 0);
+
+        /* Cálculo del nuevo marcado a partir de la ecuación de estado */
+        for(int i=0; i<nPlaces; i++){
+            for(int j=0; j<nTransitions; j++){
+                // Funcion de transferencia = I x delta
+                tf[i] += combinedIMatrix[i][j] * delta[j];
+            }
+            // M(i+1) = M(i) + I * delta
+            currentMarking[i] = currentMarking[i]+tf[i];
+        }
+
+        //La transicion se disparo exitosamente
+        return true;
     }
 
+    /* Método para imprimir matrices, utilizado en el debugging */
     private void printMatrix(Object[][] matrix){
 
         System.out.print("\n");
@@ -86,6 +119,7 @@ public class PetriNet {
 
     }
 
+    /* Método para imprimir matrices, utilizado en el debugging */
     private void printMatrix(Object[] matrix){
 
         System.out.print("\n");
@@ -98,6 +132,7 @@ public class PetriNet {
 
     }
 
+    /* Se encarga de calcular qué transiciones se encuentran sensibilizadas */
     public boolean[] areEnabled(){
 
         boolean[] enabledTransitions = new boolean[nTransitions];
@@ -119,6 +154,7 @@ public class PetriNet {
 
     }
 
+    /* Se encarga de parsear el html que contiene las tablas */
     private ArrayList<String> getTableList(String petriFile){
 
         File input = new File(petriFile);
@@ -154,6 +190,7 @@ public class PetriNet {
 
     }
 
+    /* Se encarga de contar la cantidad de plazas y transiciones de la red */
     private void countPlacesAndTransitions(){
 
         int p = 0;
@@ -178,6 +215,7 @@ public class PetriNet {
 
     }
 
+    /* Se encarga de generar matrices (2d) a partir de un String */
     private Integer[][] parseMatrix(String plainText, int rows, int columns){
 
         Integer[][] matrix = new Integer[rows][columns];
@@ -195,6 +233,7 @@ public class PetriNet {
         return matrix;
     }
 
+    /* Se encarga de generar matrices (1d) a partir de un String */
     private Integer[] parseMatrix(String plainText, int columns){
 
         Integer[] matrix = new Integer[columns];
