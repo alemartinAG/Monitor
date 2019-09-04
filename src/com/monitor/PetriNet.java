@@ -1,6 +1,7 @@
 package com.monitor;
 
 import com.errors.IllegalTriggerException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,7 +9,6 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -78,7 +78,7 @@ public class PetriNet {
         /* Si la transición a disparar no se encuentra
         sensibilizada se genera una excepción */
         if(!areEnabled()[transition]){
-            throw new IllegalTriggerException(String.format("Not enabled transition (%d) has tried to trigger", transition+1));
+            throw new IllegalTriggerException(String.format("Not-enabled transition (%d) has tried to trigger", transition+1));
         }
 
         /* Genero vector delta para calcular función de transferencia */

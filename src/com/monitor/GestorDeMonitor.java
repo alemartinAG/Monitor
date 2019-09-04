@@ -13,13 +13,13 @@ public class GestorDeMonitor {
         mutex = new Mutex();
         petriNet = new PetriNet();
 
-        try {
+        /*try {
             petriNet.trigger(2);
             petriNet.trigger(0);
             petriNet.trigger(2);
         } catch (IllegalTriggerException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
     }
