@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO: Ver si una transición puede encontrarse en vaarios hilos
+//TODO: Ver si una transición puede encontrarse en varios hilos
 public class ThreadDistribution {
 
     private ArrayList<ArrayList<Integer>> threads_transitions;

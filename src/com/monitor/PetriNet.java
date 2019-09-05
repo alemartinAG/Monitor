@@ -73,12 +73,13 @@ public class PetriNet {
 
     }
 
-    public boolean trigger(int transition) throws IllegalTriggerException {
+    public boolean trigger(int transition) {
 
         /* Si la transición a disparar no se encuentra
         sensibilizada se genera una excepción */
         if(!areEnabled()[transition]){
-            throw new IllegalTriggerException(String.format("Not-enabled transition (%d) has tried to trigger", transition+1));
+            //throw new IllegalTriggerException(String.format("Not-enabled transition (%d) has tried to trigger", transition+1));
+            return false;
         }
 
         /* Genero vector delta para calcular función de transferencia */
@@ -101,6 +102,14 @@ public class PetriNet {
 
         //La transicion se disparo exitosamente
         return true;
+    }
+
+    public int getPlacesCount(){
+        return nPlaces;
+    }
+
+    public int getTransitionsCount(){
+        return nTransitions;
     }
 
     /* Método para imprimir matrices, utilizado en el debugging */

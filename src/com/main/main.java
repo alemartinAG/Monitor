@@ -13,6 +13,10 @@ public class main {
         GestorDeMonitor monitor = new GestorDeMonitor();
         ThreadDistribution threadDistr = new ThreadDistribution();
         threadDistr.printThreads();
+
+        for(int i=0; i<threadDistr.getNumberOfThreads(); i++){
+
+        }
     }
 
 
