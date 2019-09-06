@@ -5,7 +5,11 @@ import java.util.concurrent.Semaphore;
 public class Mutex {
 
     // Binary Semaphore to implement mutex
-    private Semaphore semaphore = new Semaphore(1, true); // Ver Fairness
+    private Semaphore semaphore;
+
+    public Mutex(){
+        semaphore = new Semaphore(1, true); // Ver Fairness
+    }
 
     public boolean acquire(){
 

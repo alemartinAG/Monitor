@@ -1,5 +1,7 @@
 package com.monitor;
 
-public class Politicas {
+public interface Politicas {
+
+    abstract int getNext(boolean[] andVector);
 
 }

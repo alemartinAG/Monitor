@@ -22,8 +22,10 @@ public class PetriNet {
     private static final int BIM = 1; // Backwards Incidence Matrix (I-)
     private static final int CIM = 2; // Combined Incidence Matrix (I)
     private static final int INM = 3; // Inhibition Matrix (H)
-    private static final int MRK = 4; // Marking
-    private static final int ETR = 5; // Enabled Transitions
+    private static final int RST = 4; // Inhibition Matrix (H)
+    private static final int RDR = 5; // Inhibition Matrix (H)
+    private static final int MRK = 6; // Marking
+    private static final int ETR = 7; // Enabled Transitions
 
     private static final String PETRI = "res/petri.html"; // matrices file's path
 
@@ -63,14 +65,22 @@ public class PetriNet {
         System.out.print("Initial Marking\n");
         printMatrix(initalMarking);
 
+        //*
+
+    }
+
+    public void printEnabled(){
         System.out.print("Enabled Transitions: ");
         enabledTransitions = areEnabled();
         for(int i=0; i<enabledTransitions.length; i++){
             System.out.printf(" | T%d: %s | ", i+1, enabledTransitions[i]);
         }
         System.out.print("\n\n");
-        //*
+    }
 
+    public void printCurrentMarking(){
+        System.out.printf("Current Marking\n");
+        printMatrix(currentMarking);
     }
 
     public boolean trigger(int transition) {

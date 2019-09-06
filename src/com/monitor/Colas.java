@@ -10,8 +10,9 @@ public class Colas {
 
     public Colas(int threads){
         semaphoreList = new ArrayList<>();
+        nQueues = threads;
 
-        for(int i=0; i<threads; i++){
+        for(int i=0; i<nQueues; i++){
             semaphoreList.add(new Semaphore(0));
         }
 
@@ -31,6 +32,15 @@ public class Colas {
 
     public boolean[] getQueued(){
         boolean[] inQueue = new boolean[nQueues];
+
+        for(int i=0; i<nQueues; i++){
+            if(semaphoreList.get(i).hasQueuedThreads()){
+                inQueue[i] = true;
+            }
+            else {
+                inQueue[i] = false;
+            }
+        }
         return inQueue;
     }
 }
