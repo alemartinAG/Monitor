@@ -18,14 +18,14 @@ import java.util.regex.Pattern;
 
 public class PetriNet {
 
-    private static final int FIM = 0; // Forwards Incidence Matrix (I+)
-    private static final int BIM = 1; // Backwards Incidence Matrix (I-)
-    private static final int CIM = 2; // Combined Incidence Matrix (I)
-    private static final int INM = 3; // Inhibition Matrix (H)
-    private static final int RST = 4; // Inhibition Matrix (H)
-    private static final int RDR = 5; // Inhibition Matrix (H)
-    private static final int MRK = 6; // Marking
-    private static final int ETR = 7; // Enabled Transitions
+    public static final int FIM = 0; // Forwards Incidence Matrix (I+)
+    public static final int BIM = 1; // Backwards Incidence Matrix (I-)
+    public static final int CIM = 2; // Combined Incidence Matrix (I)
+    public static final int INM = 3; // Inhibition Matrix (H)
+    public static final int RST = 4; // Inhibition Matrix (H)
+    public static final int RDR = 5; // Inhibition Matrix (H)
+    public static final int MRK = 6; // Marking
+    public static final int ETR = 7; // Enabled Transitions
 
     private static final String PETRI = "res/petri.html"; // matrices file's path
 
@@ -50,22 +50,29 @@ public class PetriNet {
         countPlacesAndTransitions();
 
         /* Obtengo las matrices de enteros a partir de las lineas de texto generadas previamente */
-        combinedIMatrix     =   parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
-        backwardMatrix      =   parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
-        forwardMatrix       =   parseMatrix(tableList.get(FIM), nPlaces, nTransitions);
-        inhibitionMatrix    =   parseMatrix(tableList.get(INM), nPlaces, nTransitions);
-        initalMarking       =   parseMatrix(tableList.get(MRK), nPlaces);
-        currentMarking      =   initalMarking.clone();
+        setMatrices();
 
         //* Debugging
-        System.out.print("Combined Incidence Matrix\n");
+        /*System.out.print("Combined Incidence Matrix\n");
         printMatrix(combinedIMatrix);
         System.out.print("Backwards Incidence Matrix\n");
         printMatrix(backwardMatrix);
         System.out.print("Initial Marking\n");
-        printMatrix(initalMarking);
-
+        printMatrix(initalMarking);*/
         //*
+
+    }
+
+    public PetriNet(String file){
+
+        // Parseo el archivo .html de las matrices de la red de petri generado por PIPE
+        tableList = getTableList(file);
+
+        // Cuento la cantidad de plazas y transiciones
+        countPlacesAndTransitions();
+
+        /* Obtengo las matrices de enteros a partir de las lineas de texto generadas previamente */
+        setMatrices();
 
     }
 
@@ -81,6 +88,19 @@ public class PetriNet {
     public void printCurrentMarking(){
         System.out.printf("Current Marking\n");
         printMatrix(currentMarking);
+    }
+
+    public Integer[][] getMatrix(int index){
+
+        Integer[][] def = {{0},{0}};
+
+        switch (index){
+            case FIM: return forwardMatrix;
+            case BIM: return backwardMatrix;
+            case CIM: return combinedIMatrix;
+            case INM: return inhibitionMatrix;
+             default: return def;
+        }
     }
 
     public boolean trigger(int transition) {
@@ -120,6 +140,15 @@ public class PetriNet {
 
     public int getTransitionsCount(){
         return nTransitions;
+    }
+
+    private void setMatrices(){
+        combinedIMatrix     =   parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
+        backwardMatrix      =   parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
+        forwardMatrix       =   parseMatrix(tableList.get(FIM), nPlaces, nTransitions);
+        inhibitionMatrix    =   parseMatrix(tableList.get(INM), nPlaces, nTransitions);
+        initalMarking       =   parseMatrix(tableList.get(MRK), nPlaces);
+        currentMarking      =   initalMarking.clone();
     }
 
     /* Método para imprimir matrices, utilizado en el debugging */

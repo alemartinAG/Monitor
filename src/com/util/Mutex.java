@@ -5,24 +5,18 @@ import java.util.concurrent.Semaphore;
 public class Mutex {
 
     // Binary Semaphore to implement mutex
-    private Semaphore semaphore;
+    Semaphore semaphore;
 
     public Mutex(){
-        semaphore = new Semaphore(1, true); // Ver Fairness
+        semaphore = new Semaphore(1, true);
     }
 
-    public boolean acquire(){
+    public void acquire(){
 
         try {
-
             semaphore.acquire();
-
-            return true;
-
         } catch (InterruptedException e) {
             e.printStackTrace();
-
-            return false;
         }
 
     }

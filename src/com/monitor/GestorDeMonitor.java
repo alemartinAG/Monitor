@@ -4,6 +4,7 @@ import com.errors.IllegalTriggerException;
 import com.util.Mutex;
 
 import java.lang.reflect.Array;
+import java.sql.Timestamp;
 import java.util.Arrays;
 
 public class GestorDeMonitor {
@@ -28,6 +29,7 @@ public class GestorDeMonitor {
         boolean result = true;
 
         mutex.acquire();
+        System.out.printf("Acquired by Thread-%s\n", Thread.currentThread().getName());
 
         while(k){
 
@@ -74,16 +76,21 @@ public class GestorDeMonitor {
             }
             else {
                 //System.out.printf("THREAD %s WENT TO SLEEP\n", Thread.currentThread().getName());
+                //System.out.printf("[%s] Mutex released by Thread-%s and went to SLEEP\n", (new Timestamp(System.currentTimeMillis())),Thread.currentThread().getName());
                 mutex.release();
-                //queues.sleepThread(Integer.parseInt(Thread.currentThread().getName()));
                 queues.sleepThread(transition);
 
             }
 
         }
 
-        System.out.printf("Mutex released by Thread-%s\n", Thread.currentThread().getName());
+        //System.out.printf("[%s] Mutex released by Thread-%s\n", (new Timestamp(System.currentTimeMillis())),Thread.currentThread().getName());
         mutex.release();
+        /*try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
 
     }
 
