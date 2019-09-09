@@ -34,12 +34,7 @@ public class Colas {
         boolean[] inQueue = new boolean[nQueues];
 
         for(int i=0; i<nQueues; i++){
-            if(semaphoreList.get(i).hasQueuedThreads()){
-                inQueue[i] = true;
-            }
-            else {
-                inQueue[i] = false;
-            }
+            inQueue[i] = semaphoreList.get(i).hasQueuedThreads();
         }
         return inQueue;
     }

@@ -39,7 +39,6 @@ public class PetriNet {
     private Integer[][] inhibitionMatrix;
     private Integer[]   initalMarking;
     private Integer[]   currentMarking;
-    private boolean[]   enabledTransitions;
 
     public PetriNet(){
 
@@ -76,17 +75,17 @@ public class PetriNet {
 
     }
 
-    public void printEnabled(){
+    protected void printEnabled(){
         System.out.print("Enabled Transitions: ");
-        enabledTransitions = areEnabled();
+        boolean[] enabledTransitions = areEnabled();
         for(int i=0; i<enabledTransitions.length; i++){
             System.out.printf(" | T%d: %s | ", i+1, enabledTransitions[i]);
         }
         System.out.print("\n\n");
     }
 
-    public void printCurrentMarking(){
-        System.out.printf("Current Marking\n");
+    protected void printCurrentMarking(){
+        System.out.println("Current Marking");
         printMatrix(currentMarking);
     }
 
@@ -117,7 +116,7 @@ public class PetriNet {
         Arrays.fill(delta, 0);
         delta[transition] = 1;
 
-        Integer tf[] = new Integer[nPlaces];
+        Integer[] tf = new Integer[nPlaces];
         Arrays.fill(tf, 0);
 
         /* Cálculo del nuevo marcado a partir de la ecuación de estado */
@@ -273,7 +272,7 @@ public class PetriNet {
 
         for(int i=0; i<rows; i++){
             for(int j=0; j<columns; j++){
-                matcher.find();
+                if(matcher.find())
                 matrix[i][j] = Integer.parseInt(matcher.group().trim());
             }
         }
@@ -290,7 +289,7 @@ public class PetriNet {
         Matcher matcher = pattern.matcher(plainText);
 
         for(int j=0; j<columns; j++){
-            matcher.find();
+            if(matcher.find())
             matrix[j] = Integer.parseInt(matcher.group().trim());
         }
 

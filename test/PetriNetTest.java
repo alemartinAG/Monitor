@@ -23,6 +23,11 @@ public class PetriNetTest {
             {-1,1,0,-1,1,0} //P7
     };
 
+    private final static boolean[] enabled = {true, false, false, true, false, false};
+    private final static boolean[] enabled_t1 = {false, true, false, false, false, false};
+    private final static boolean[] enabled_t4 = {false, false, false, false, true, false};
+
+
     private int[][] INHIBITION;
 
     @Before
@@ -67,6 +72,21 @@ public class PetriNetTest {
         Assert.assertEquals(COMBINED, pn.getMatrix(PetriNet.CIM));
         Assert.assertEquals(INHIBITION, pn.getMatrix(PetriNet.INM));
 
+    }
+
+    @Test
+    public void areEnabledTest() {
+
+        Assert.assertArrayEquals(enabled, pn.areEnabled());
+        Assert.assertFalse(Arrays.equals(enabled_t1, pn.areEnabled()));
+
+        pn.trigger(0);
+        Assert.assertArrayEquals(enabled_t1, pn.areEnabled());
+        pn.trigger(1);
+        pn.trigger(2);
+
+        pn.trigger(3);
+        Assert.assertArrayEquals(enabled_t4, pn.areEnabled());
     }
 
 

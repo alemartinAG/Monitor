@@ -5,7 +5,7 @@ import java.util.concurrent.Semaphore;
 public class Mutex {
 
     // Binary Semaphore to implement mutex
-    Semaphore semaphore;
+    private Semaphore semaphore;
 
     public Mutex(){
         semaphore = new Semaphore(1, true);

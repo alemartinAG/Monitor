@@ -13,20 +13,25 @@ public class ThreadDistribution {
 
     public ThreadDistribution(){
 
-        threads_transitions = new ArrayList<ArrayList<Integer>>();
-        parseThreadDistribution();
+        threads_transitions = new ArrayList<>();
+        parseThreadDistribution("res/threads.txt");
 
 
     }
 
-    private void parseThreadDistribution(){
+    public ThreadDistribution(String file){
+        threads_transitions = new ArrayList<>();
+        parseThreadDistribution(file);
+    }
+
+    private void parseThreadDistribution(String file){
 
         String line;
-        FileReader fileReader = null;
+        FileReader fileReader;
 
         try {
 
-            fileReader = new FileReader("res/threads.txt");
+            fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             while((line = bufferedReader.readLine()) != null) {
