@@ -4,7 +4,10 @@ import java.util.concurrent.Semaphore;
 
 public class Mutex {
 
-    // Binary Semaphore to implement mutex
+    /**
+     * Uso un semáforo binario para implementar un mutex
+     */
+
     private Semaphore semaphore;
 
     public Mutex(){
@@ -12,19 +15,15 @@ public class Mutex {
     }
 
     public void acquire(){
-
         try {
             semaphore.acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     public void release(){
-
         semaphore.release();
-
     }
 
 }

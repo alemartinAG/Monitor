@@ -12,7 +12,7 @@ public class main {
     public static void main(String[] args){
 
         PetriNet pn = new PetriNet();
-        GestorDeMonitor monitor = new GestorDeMonitor(pn, 10);
+        GestorDeMonitor monitor = new GestorDeMonitor(pn, 20);
         ThreadDistribution threadDistr = new ThreadDistribution();
 
         pn.printMatrix(pn.getMatrix(PetriNet.CIM));
@@ -28,7 +28,6 @@ public class main {
 
             Thread t = new Thread(transitionThread);
             t.start();
-
 
         }
     }

@@ -2,6 +2,10 @@ package com.monitor;
 
 public class FairPolicy implements Politicas {
 
+    /**
+     * Para debugging
+     */
+
     @Override
     public  int getNext(boolean[] andVector) {
 

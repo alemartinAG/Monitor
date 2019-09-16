@@ -8,6 +8,12 @@ public class Colas {
     private int nQueues;
     private ArrayList<Semaphore> semaphoreList;
 
+    /**
+     * Creo una cola para cada thread, se utiliza un
+     * semáforo inicializado en 0 para cada cola
+     *
+     * @param threads cantidad de threads para la red
+     */
     public Colas(int threads){
         semaphoreList = new ArrayList<>();
         nQueues = threads;
@@ -18,6 +24,7 @@ public class Colas {
 
     }
 
+    /* Se encarga de dormir al thread en su correspondiente semaforo */
     public void sleepThread(int thread_number){
         try {
             semaphoreList.get(thread_number).acquire();
@@ -26,10 +33,12 @@ public class Colas {
         }
     }
 
+    /* Se encarga de liberar el thread de su semaforo */
     public void wakeThread(int thread_number){
         semaphoreList.get(thread_number).release();
     }
 
+    /* Devuelve un vector con los semaforos ocupados */
     public boolean[] getQueued(){
         boolean[] inQueue = new boolean[nQueues];
 

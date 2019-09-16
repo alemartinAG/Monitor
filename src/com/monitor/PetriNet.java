@@ -51,15 +51,6 @@ public class PetriNet {
         /* Obtengo las matrices de enteros a partir de las lineas de texto generadas previamente */
         setMatrices();
 
-        //* Debugging
-        /*System.out.print("Combined Incidence Matrix\n");
-        printMatrix(combinedIMatrix);
-        System.out.print("Backwards Incidence Matrix\n");
-        printMatrix(backwardMatrix);
-        System.out.print("Initial Marking\n");
-        printMatrix(initalMarking);*/
-        //*
-
     }
 
     public PetriNet(String file){
@@ -75,39 +66,12 @@ public class PetriNet {
 
     }
 
-    protected void printEnabled(){
-        System.out.print("Enabled Transitions: ");
-        boolean[] enabledTransitions = areEnabled();
-        for(int i=0; i<enabledTransitions.length; i++){
-            System.out.printf(" | T%d: %s | ", i+1, enabledTransitions[i]);
-        }
-        System.out.print("\n\n");
-    }
-
-    protected void printCurrentMarking(){
-        System.out.println("Current Marking");
-        printMatrix(currentMarking);
-    }
-
-    public Integer[][] getMatrix(int index){
-
-        Integer[][] def = {{0},{0}};
-
-        switch (index){
-            case FIM: return forwardMatrix;
-            case BIM: return backwardMatrix;
-            case CIM: return combinedIMatrix;
-            case INM: return inhibitionMatrix;
-             default: return def;
-        }
-    }
-
+    /* Se encarga de disparar una transicion y actualizar el marcado de la red */
     public boolean trigger(int transition) {
 
         /* Si la transición a disparar no se encuentra
-        sensibilizada se genera una excepción */
+        sensibilizada devuelvo falso */
         if(!areEnabled()[transition]){
-            //throw new IllegalTriggerException(String.format("Not-enabled transition (%d) has tried to trigger", transition+1));
             return false;
         }
 
@@ -133,10 +97,42 @@ public class PetriNet {
         return true;
     }
 
+    /* Debugging, imprime la sensibilizacion de las transiciones */
+    protected void printEnabled(){
+        System.out.print("Enabled Transitions: ");
+        boolean[] enabledTransitions = areEnabled();
+        for(int i=0; i<enabledTransitions.length; i++){
+            System.out.printf(" | T%d: %s | ", i+1, enabledTransitions[i]);
+        }
+        System.out.print("\n\n");
+    }
+
+    /* Debugging, impime el marcado actual */
+    protected void printCurrentMarking(){
+        System.out.println("Current Marking");
+        printMatrix(currentMarking);
+    }
+
+    /* Devuelve la matriz especificada */
+    public Integer[][] getMatrix(int index){
+
+        Integer[][] def = {{0},{0}};
+
+        switch (index){
+            case FIM: return forwardMatrix;
+            case BIM: return backwardMatrix;
+            case CIM: return combinedIMatrix;
+            case INM: return inhibitionMatrix;
+             default: return def;
+        }
+    }
+
+    /* Devuelve el numero de plazas de la red */
     public int getPlacesCount(){
         return nPlaces;
     }
 
+    /* Devuelve el numero de transiciones de la red */
     public int getTransitionsCount(){
         return nTransitions;
     }
@@ -192,6 +188,7 @@ public class PetriNet {
 
     }
 
+    /* Se encarga de inicializar las matrices */
     private void setMatrices(){
         combinedIMatrix     =   parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
         backwardMatrix      =   parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
