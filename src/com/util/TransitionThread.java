@@ -26,7 +26,7 @@ public class TransitionThread implements Runnable {
     public void run() {
         Thread.currentThread().setName(String.format("%d", thread_number));
 
-        while(true){
+        while(GestorDeMonitor.keeprunning){
             for(int i=0; i<transitions_number; i++){
                 //System.out.printf("Fire T%d from Thread-%s\n", thread_transitions.get(i), Thread.currentThread().getName());
                 monitor.fireTransition(thread_transitions.get(i)-1);

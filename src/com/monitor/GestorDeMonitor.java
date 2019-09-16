@@ -3,7 +3,6 @@ package com.monitor;
 import com.errors.IllegalTriggerException;
 import com.util.Mutex;
 
-import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
@@ -13,14 +12,18 @@ public class GestorDeMonitor {
     private PetriNet petriNet;
     private Colas queues;
     private Politicas policy;
+    private int transitionsLeft;
+    private int transitionsTotal;
+    public static boolean keeprunning = true;
 
-    public GestorDeMonitor(){
+    public GestorDeMonitor(PetriNet net, int limit){
 
         mutex = new Mutex();
-        petriNet = new PetriNet();
+        petriNet = net;
         policy = new FairPolicy();
         queues = new Colas(petriNet.getTransitionsCount());
-
+        transitionsLeft = limit;
+        transitionsTotal = limit;
     }
 
     public void fireTransition(int transition){
@@ -29,17 +32,21 @@ public class GestorDeMonitor {
         boolean result = true;
 
         mutex.acquire();
-        System.out.printf("Acquired by Thread-%s\n", Thread.currentThread().getName());
+        //System.out.printf("Acquired by Thread-%s\n", Thread.currentThread().getName());
 
         while(k){
-
-            //petriNet.printEnabled();
-            //petriNet.printCurrentMarking();
 
             result = petriNet.trigger(transition);
 
             if(result){
 
+                transitionsLeft--;
+
+                if(transitionsLeft < 0){
+                    keeprunning = false;
+                    mutex.release();
+                    return;
+                }
 
                 boolean[] enabledVector = petriNet.areEnabled().clone();
                 boolean[] queueVector = queues.getQueued().clone();
@@ -49,7 +56,7 @@ public class GestorDeMonitor {
 
                 boolean m = false;
 
-                System.out.printf("Transition %d triggered\n", transition+1);
+                System.out.printf("%3d | Transition %d triggered\n", transitionsTotal-transitionsLeft, transition+1);
 
                 for(int i=0; i<petriNet.getTransitionsCount(); i++){
                     //System.out.printf("i = %d // qV = %d // eV = %d\n", i, queueVector.length, enabledVector.length);

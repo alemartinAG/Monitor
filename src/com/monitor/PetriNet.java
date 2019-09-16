@@ -141,17 +141,8 @@ public class PetriNet {
         return nTransitions;
     }
 
-    private void setMatrices(){
-        combinedIMatrix     =   parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
-        backwardMatrix      =   parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
-        forwardMatrix       =   parseMatrix(tableList.get(FIM), nPlaces, nTransitions);
-        inhibitionMatrix    =   parseMatrix(tableList.get(INM), nPlaces, nTransitions);
-        initalMarking       =   parseMatrix(tableList.get(MRK), nPlaces);
-        currentMarking      =   initalMarking.clone();
-    }
-
     /* Método para imprimir matrices, utilizado en el debugging */
-    private void printMatrix(Object[][] matrix){
+    public void printMatrix(Object[][] matrix){
 
         System.out.print("\n");
 
@@ -167,7 +158,7 @@ public class PetriNet {
     }
 
     /* Método para imprimir matrices, utilizado en el debugging */
-    private void printMatrix(Object[] matrix){
+    public void printMatrix(Object[] matrix){
 
         System.out.print("\n");
 
@@ -199,6 +190,15 @@ public class PetriNet {
 
         return enabledTransitions;
 
+    }
+
+    private void setMatrices(){
+        combinedIMatrix     =   parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
+        backwardMatrix      =   parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
+        forwardMatrix       =   parseMatrix(tableList.get(FIM), nPlaces, nTransitions);
+        inhibitionMatrix    =   parseMatrix(tableList.get(INM), nPlaces, nTransitions);
+        initalMarking       =   parseMatrix(tableList.get(MRK), nPlaces);
+        currentMarking      =   initalMarking.clone();
     }
 
     /* Se encarga de parsear el html que contiene las tablas */

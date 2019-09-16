@@ -89,6 +89,4 @@ public class PetriNetTest {
         Assert.assertArrayEquals(enabled_t4, pn.areEnabled());
     }
 
-
-
 }
