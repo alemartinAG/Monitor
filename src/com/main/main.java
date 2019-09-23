@@ -1,18 +1,16 @@
 package com.main;
 
 import com.monitor.GestorDeMonitor;
-import com.monitor.PetriNet;
+import com.petri.PetriNet;
 import com.util.ThreadDistribution;
-import com.util.TransitionThread;
-
-import java.util.Arrays;
+import com.petri.TransitionThread;
 
 public class main {
 
     public static void main(String[] args){
 
         PetriNet pn = new PetriNet();
-        GestorDeMonitor monitor = new GestorDeMonitor(pn, 20);
+        GestorDeMonitor monitor = new GestorDeMonitor(pn, 10);
         ThreadDistribution threadDistr = new ThreadDistribution();
 
         pn.printMatrix(pn.getMatrix(PetriNet.CIM));
@@ -31,7 +29,5 @@ public class main {
 
         }
     }
-
-
 
 }

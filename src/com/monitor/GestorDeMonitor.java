@@ -1,9 +1,9 @@
 package com.monitor;
 
-import com.errors.IllegalTriggerException;
+import com.petri.PetriNet;
+import com.util.Log;
 import com.util.Mutex;
 
-import java.sql.Timestamp;
 import java.util.Arrays;
 
 public class GestorDeMonitor {
@@ -12,6 +12,7 @@ public class GestorDeMonitor {
     private PetriNet petriNet;
     private Colas queues;
     private Politicas policy;
+    private Log eventLog = new Log();
     private int transitionsLeft;
     private int transitionsTotal;
     public static boolean keeprunning = true;
@@ -54,6 +55,8 @@ public class GestorDeMonitor {
                 }
 
                 System.out.printf("%3d | Transition %d triggered\n", transitionsTotal-transitionsLeft, transition+1);
+                String currentMarking = Arrays.toString(petriNet.getMatrix(PetriNet.MRK)[PetriNet.CURRENT]);
+                eventLog.log(String.format("T%d%sMarking: %s", transition+1, Log.SEPARATOR, currentMarking));
 
 
                 boolean[] enabledVector = petriNet.areEnabled().clone();

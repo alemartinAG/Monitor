@@ -1,7 +1,8 @@
-package com.monitor;
+package com.petri;
 
 import com.errors.IllegalTriggerException;
 
+import com.util.Log;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,6 +27,9 @@ public class PetriNet {
     public static final int RDR = 5; // Inhibition Matrix (H)
     public static final int MRK = 6; // Marking
     public static final int ETR = 7; // Enabled Transitions
+
+    public static final int INITIAL = 0;
+    public static final int CURRENT = 1;
 
     private static final String PETRI = "res/petri.html"; // matrices file's path
 
@@ -117,12 +121,14 @@ public class PetriNet {
     public Integer[][] getMatrix(int index){
 
         Integer[][] def = {{0},{0}};
+        Integer[][] marking = {initalMarking.clone(), currentMarking.clone()};
 
         switch (index){
             case FIM: return forwardMatrix;
             case BIM: return backwardMatrix;
             case CIM: return combinedIMatrix;
             case INM: return inhibitionMatrix;
+            case MRK: return marking;
              default: return def;
         }
     }

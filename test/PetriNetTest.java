@@ -1,6 +1,5 @@
 
-import com.monitor.PetriNet;
-import org.junit.After;
+import com.petri.PetriNet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.util;
+package com.petri;
 
 import com.monitor.GestorDeMonitor;
 
@@ -37,15 +37,16 @@ public class TransitionThread implements Runnable {
 
         while(GestorDeMonitor.keeprunning){
 
-            /* Para no acaparar el semáforo */
-            try {
-                Thread.sleep(new Random().nextInt(20));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             /* El hilo trata de disparar sus transiciones, una por una */
             for(int i=0; i<transitions_number; i++){
+
+                /* Para no acaparar el semáforo */
+                try {
+                    Thread.sleep(new Random().nextInt(20));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 monitor.fireTransition(thread_transitions.get(i)-1);
             }
         }
