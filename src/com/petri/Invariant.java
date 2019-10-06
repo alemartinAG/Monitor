@@ -8,14 +8,18 @@ import java.util.regex.Pattern;
 
 public abstract class Invariant {
 
-    private ArrayList<ArrayList<Integer>> invariantsList;
+    ArrayList<ArrayList<Integer>> invariantsList;
 
-    abstract boolean checkInvariants();
+    /* Se encarga de comprobar que se cumplan las invariantes */
+    abstract public boolean checkInvariants();
 
+    /* Se encarga de parsear el documento que especifica las invariantes */
     void parseInvariants(String file){
 
         String line;
         FileReader fileReader;
+
+        invariantsList = new ArrayList<>();
 
         try {
 

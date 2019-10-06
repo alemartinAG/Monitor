@@ -11,7 +11,7 @@ public class TInvariants extends Invariant {
     }
 
     @Override
-    boolean checkInvariants() {
+    public boolean checkInvariants() {
         return false;
     }
 }

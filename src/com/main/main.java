@@ -1,9 +1,12 @@
 package com.main;
 
 import com.monitor.GestorDeMonitor;
+import com.petri.PInvariant;
 import com.petri.PetriNet;
 import com.util.ThreadDistribution;
 import com.petri.TransitionThread;
+
+import java.util.concurrent.CyclicBarrier;
 
 public class main {
 
@@ -28,6 +31,11 @@ public class main {
             t.start();
 
         }
+
+        //new CyclicBarrier(threadDistr.getNumberOfThreads()); TODO: VER SINCRONIZACIÓN
+
+        PInvariant pinv = new PInvariant();
+        System.out.println(pinv.checkInvariants());
     }
 
 }
