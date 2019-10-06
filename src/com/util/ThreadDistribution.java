@@ -1,59 +1,19 @@
 package com.util;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class ThreadDistribution {
 
+    private static final String THREADS = "res/threads.txt";
     private ArrayList<ArrayList<Integer>> threads_transitions;
 
     public ThreadDistribution(){
-        threads_transitions = new ArrayList<>();
-        parseThreadDistribution("res/threads.txt");
+        threads_transitions = new Parser(THREADS, "\\d+", "(", ")").getParsedElements();
     }
 
     public ThreadDistribution(String file){
-        threads_transitions = new ArrayList<>();
-        parseThreadDistribution(file);
-    }
-
-    /* Se encarga de parsear el documento que especifica la relacion Thread-Transicion */
-    private void parseThreadDistribution(String file){
-
-        String line;
-        FileReader fileReader;
-
-        try {
-
-            fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            while((line = bufferedReader.readLine()) != null) {
-
-                String substr = line.substring(line.indexOf("("), line.indexOf(")"));
-
-                Pattern pattern = Pattern.compile("\\d+");
-                Matcher matcher = pattern.matcher(substr);
-
-                ArrayList<Integer> transitions = new ArrayList<>();
-
-                while (matcher.find()) {
-                    transitions.add(Integer.parseInt(matcher.group().trim()));
-                }
-
-                threads_transitions.add(transitions);
-            }
-
-            bufferedReader.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
+        threads_transitions = new Parser(file, "\\d+", "(", ")").getParsedElements();
     }
 
     /* Devuelve el numero de threads necesarios */

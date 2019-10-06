@@ -2,7 +2,6 @@ package com.petri;
 
 import com.errors.IllegalTriggerException;
 
-import com.util.Log;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -115,6 +114,11 @@ public class PetriNet {
     protected void printCurrentMarking(){
         System.out.println("Current Marking");
         printMatrix(currentMarking);
+    }
+
+    /* Devuelve el marcado inicial de la red */
+    public Integer[] getInitalMarking(){
+        return initalMarking;
     }
 
     /* Devuelve la matriz especificada */

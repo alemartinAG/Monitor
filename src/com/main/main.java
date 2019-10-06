@@ -3,6 +3,7 @@ package com.main;
 import com.monitor.GestorDeMonitor;
 import com.petri.PInvariant;
 import com.petri.PetriNet;
+import com.petri.TInvariant;
 import com.util.ThreadDistribution;
 import com.petri.TransitionThread;
 
@@ -13,7 +14,7 @@ public class main {
     public static void main(String[] args){
 
         PetriNet pn = new PetriNet();
-        GestorDeMonitor monitor = new GestorDeMonitor(pn, 10);
+        /*GestorDeMonitor monitor = new GestorDeMonitor(pn, 200);
         ThreadDistribution threadDistr = new ThreadDistribution();
 
         pn.printMatrix(pn.getMatrix(PetriNet.CIM));
@@ -30,12 +31,15 @@ public class main {
             Thread t = new Thread(transitionThread);
             t.start();
 
-        }
+        }*/
 
         //new CyclicBarrier(threadDistr.getNumberOfThreads()); TODO: VER SINCRONIZACIÓN
 
         PInvariant pinv = new PInvariant();
-        System.out.println(pinv.checkInvariants());
+        System.out.println("P INVARIANTES: "+pinv.checkInvariants(pn.getInitalMarking()));
+
+        TInvariant tinv = new TInvariant();
+        System.out.println("T INVARIANTES: "+tinv.checkInvariants(pn.getInitalMarking()));
     }
 
 }

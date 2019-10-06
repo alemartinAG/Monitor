@@ -1,54 +1,26 @@
 package com.petri;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import com.util.Parser;
+
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class Invariant {
 
-    ArrayList<ArrayList<Integer>> invariantsList;
+    final static String LOGPATH = "res/log.txt";
+    ArrayList<ArrayList<Integer>> invariantList;
+    ArrayList<ArrayList<Integer>> stateList;
 
     /* Se encarga de comprobar que se cumplan las invariantes */
-    abstract public boolean checkInvariants();
+    abstract public boolean checkInvariants(Integer[] initialState);
 
     /* Se encarga de parsear el documento que especifica las invariantes */
     void parseInvariants(String file){
+        invariantList = new Parser(file, "\\d+", "(", ")").getParsedElements();
+    }
 
-        String line;
-        FileReader fileReader;
-
-        invariantsList = new ArrayList<>();
-
-        try {
-
-            fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            while((line = bufferedReader.readLine()) != null) {
-
-                String substr = line.substring(line.indexOf("("), line.indexOf(")"));
-
-                Pattern pattern = Pattern.compile("\\d+");
-                Matcher matcher = pattern.matcher(substr);
-
-                ArrayList<Integer> invariants = new ArrayList<>();
-
-                while (matcher.find()) {
-                    invariants.add(Integer.parseInt(matcher.group().trim()));
-                }
-
-                invariantsList.add(invariants);
-
-            }
-
-            bufferedReader.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    /* Se encarga de parsear los estados del log */
+    void parseLogStates(){
+        stateList = new Parser(LOGPATH, "\\d+", "[", "]").getParsedElements();
     }
 
 
