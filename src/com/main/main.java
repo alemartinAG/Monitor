@@ -7,6 +7,7 @@ import com.petri.TInvariant;
 import com.util.ThreadDistribution;
 import com.petri.TransitionThread;
 
+import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 public class main {
@@ -14,16 +15,20 @@ public class main {
     public static void main(String[] args){
 
         PetriNet pn = new PetriNet();
-        /*GestorDeMonitor monitor = new GestorDeMonitor(pn, 200);
+        GestorDeMonitor monitor = new GestorDeMonitor(pn, 200);
         ThreadDistribution threadDistr = new ThreadDistribution();
 
         pn.printMatrix(pn.getMatrix(PetriNet.CIM));
 
         threadDistr.printThreads();
 
-        for(int i=0; i<threadDistr.getNumberOfThreads(); i++){
+        int n_threads = threadDistr.getNumberOfThreads();
 
-            TransitionThread transitionThread = new TransitionThread(i, threadDistr.getTransitionsOfThread(i));
+        CyclicBarrier barrier = new CyclicBarrier(n_threads+1);
+
+        for(int i=0; i<n_threads; i++){
+
+            TransitionThread transitionThread = new TransitionThread(i, threadDistr.getTransitionsOfThread(i), barrier);
             transitionThread.setMonitor(monitor);
 
             System.out.printf("Run Thread-%d/%d!\n", i, threadDistr.getNumberOfThreads());
@@ -31,9 +36,18 @@ public class main {
             Thread t = new Thread(transitionThread);
             t.start();
 
-        }*/
+        }
 
-        //new CyclicBarrier(threadDistr.getNumberOfThreads()); TODO: VER SINCRONIZACIÓN
+        try {
+            System.out.println("Espera el main ....");
+            barrier.await();
+
+        } catch (InterruptedException | BrokenBarrierException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Continua el main ....");
+
 
         PInvariant pinv = new PInvariant();
         System.out.println("P INVARIANTES: "+pinv.checkInvariants(pn.getInitalMarking()));

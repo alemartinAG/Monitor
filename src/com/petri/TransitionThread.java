@@ -4,6 +4,8 @@ import com.monitor.GestorDeMonitor;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public class TransitionThread implements Runnable {
 
@@ -11,13 +13,15 @@ public class TransitionThread implements Runnable {
     private ArrayList<Integer> thread_transitions;
     private GestorDeMonitor monitor;
     private int transitions_number;
+    private CyclicBarrier barrier;
 
     /**
      *
      * @param index número del thread según orden de creación
      * @param transitions transiciones asignadas al thread
      */
-    public TransitionThread(int index, ArrayList<Integer> transitions){
+    public TransitionThread(int index, ArrayList<Integer> transitions, CyclicBarrier barrier){
+        this.barrier = barrier;
         thread_number = index;
         thread_transitions = new ArrayList<>();
         thread_transitions = transitions;
@@ -50,6 +54,13 @@ public class TransitionThread implements Runnable {
                 monitor.fireTransition(thread_transitions.get(i)-1);
             }
         }
+
+        try {
+            barrier.await();
+        } catch (InterruptedException | BrokenBarrierException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
