@@ -274,6 +274,7 @@ public class PetriNet {
 
         Integer[][] matrix = new Integer[rows][columns];
 
+        // Busco lineas que empiecen con un numero (puede ser negativo)
         Pattern pattern = Pattern.compile("\\s-?\\d+");
         Matcher matcher = pattern.matcher(plainText);
 
