@@ -1,2 +1,2 @@
 Thread 1: (T1;T2;T3)
-Thread 2: (T4;T5;T6
+Thread 2: (T4;T5;T6)
