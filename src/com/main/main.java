@@ -49,11 +49,11 @@ public class main {
         System.out.println("Continua el main ....");
 
 
-        PInvariant pinv = new PInvariant();
-        System.out.println("P INVARIANTES: "+pinv.checkInvariants(pn.getInitalMarking()));
-
-        TInvariant tinv = new TInvariant();
-        System.out.println("T INVARIANTES: "+tinv.checkInvariants(pn.getInitalMarking()));
+//        PInvariant pinv = new PInvariant();
+//        System.out.println("P INVARIANTES: "+pinv.checkInvariants(pn.getInitialMarking()));
+//
+//        TInvariant tinv = new TInvariant();
+//        System.out.println("T INVARIANTES: "+tinv.checkInvariants(pn.getInitialMarking()));
     }
 
 }

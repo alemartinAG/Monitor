@@ -1,5 +1,6 @@
 package com.monitor;
 
+import com.petri.PInvariant;
 import com.petri.PetriNet;
 import com.util.Log;
 import com.util.Mutex;
@@ -16,6 +17,7 @@ public class GestorDeMonitor {
     private int transitionsLeft;
     private int transitionsTotal;
     public static boolean keeprunning = true;
+    private PInvariant pInvariant;
 
     /**
      * Clase encargada de implementar la logica del monitor
@@ -30,6 +32,7 @@ public class GestorDeMonitor {
         queues = new Colas(petriNet.getTransitionsCount());
         transitionsLeft = limit;
         transitionsTotal = limit;
+        pInvariant = new PInvariant(petriNet.getInitialMarking());
     }
 
     public void fireTransition(int transition){
@@ -45,6 +48,11 @@ public class GestorDeMonitor {
             result = petriNet.trigger(transition);
 
             if(result){
+
+                /* Controlo invariantes */
+                if(!pInvariant.checkInvariants(petriNet.getCurrentMarking())){
+                    System.out.println("TA TO ROTO");
+                }
 
                 /* Disparo la cantidad de transiciones especificadas */
                 transitionsLeft--;

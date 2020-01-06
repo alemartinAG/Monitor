@@ -1,7 +1,5 @@
 package com.petri;
 
-import com.errors.IllegalTriggerException;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -40,7 +38,7 @@ public class PetriNet {
     private Integer[][] backwardMatrix;
     private Integer[][] forwardMatrix;
     private Integer[][] inhibitionMatrix;
-    private Integer[]   initalMarking;
+    private Integer[]   initialMarking;
     private Integer[]   currentMarking;
 
     public PetriNet(){
@@ -117,15 +115,20 @@ public class PetriNet {
     }
 
     /* Devuelve el marcado inicial de la red */
-    public Integer[] getInitalMarking(){
-        return initalMarking;
+    public Integer[] getInitialMarking(){
+        return initialMarking;
+    }
+
+    /* Devuelve el marcado actual de la red */
+    public Integer[] getCurrentMarking(){
+        return currentMarking;
     }
 
     /* Devuelve la matriz especificada */
     public Integer[][] getMatrix(int index){
 
         Integer[][] def = {{0},{0}};
-        Integer[][] marking = {initalMarking.clone(), currentMarking.clone()};
+        Integer[][] marking = {initialMarking.clone(), currentMarking.clone()};
 
         switch (index){
             case FIM: return forwardMatrix;
@@ -204,8 +207,8 @@ public class PetriNet {
         backwardMatrix      =   parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
         forwardMatrix       =   parseMatrix(tableList.get(FIM), nPlaces, nTransitions);
         inhibitionMatrix    =   parseMatrix(tableList.get(INM), nPlaces, nTransitions);
-        initalMarking       =   parseMatrix(tableList.get(MRK), nPlaces);
-        currentMarking      =   initalMarking.clone();
+        initialMarking =   parseMatrix(tableList.get(MRK), nPlaces);
+        currentMarking      =   initialMarking.clone();
     }
 
     /* Se encarga de parsear el html que contiene las tablas */

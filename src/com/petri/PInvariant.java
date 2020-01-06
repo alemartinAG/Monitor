@@ -1,57 +1,60 @@
 package com.petri;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PInvariant extends Invariant{
 
+    private Integer[] invariantTokens;
 
-
-    public PInvariant(){
+    public PInvariant(Integer[] initialMarking){
         parseInvariants("res/p-invariantes.txt");
+        setInvariantTokens(initialMarking);
     }
 
-    public PInvariant(String file){
+    public PInvariant(String file, Integer[] initialMarking){
         parseInvariants(file);
+        setInvariantTokens(initialMarking);
     }
-
 
     /* Chequea que la suma de tokens en las plazas
     de la invariante se mantenga siempre igual */
     @Override
-    public boolean checkInvariants(Integer[] initialState) {
+    public boolean checkInvariants(Integer[] currentMarking) {
 
-        parseLogStates();
-
+        int index = 0;
         for (ArrayList<Integer> invariant : invariantList) {
+            int invariantCurrentTokens = 0;
 
-            int tokens_init = 0;
-
-            // Suma inicial, debe ser igual en todos los estados
             for (Integer place : invariant) {
-                tokens_init += initialState[place-1];
+                invariantCurrentTokens += currentMarking[place-1];
             }
 
-            //System.out.printf("tokens_init = %d\n", tokens_init);
-
-            for (ArrayList<Integer> state : stateList) {
-
-                int tokens = 0;
-
-                // Suma de tokens en el estado actual
-                for (Integer place : invariant) {
-                    tokens += state.get(place-1);
-                }
-
-                //System.out.printf("tokens = %d\n", tokens);
-
-                if(tokens != tokens_init){
-                    return false;
-                }
+            if (invariantCurrentTokens != invariantTokens[index]) {
+                return false;
             }
+
+            index++;
         }
 
         return true;
     }
 
+    /* Setea la suma inicial de tokens para cada invariante */
+    private void setInvariantTokens(Integer[] initialMarking){
+
+        invariantTokens = new Integer[invariantList.size()];
+        Arrays.fill(invariantTokens, 0);
+
+        int index = 0;
+
+        for (ArrayList<Integer> invariant : invariantList) {
+            for (Integer place : invariant) {
+                invariantTokens[index] += initialMarking[place-1];
+            }
+
+            index++;
+        }
+    }
 
 }
