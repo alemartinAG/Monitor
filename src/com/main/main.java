@@ -31,7 +31,7 @@ public class main {
             TransitionThread transitionThread = new TransitionThread(i, threadDistr.getTransitionsOfThread(i), barrier);
             transitionThread.setMonitor(monitor);
 
-            System.out.printf("Run Thread-%d/%d!\n", i, threadDistr.getNumberOfThreads());
+            System.out.printf("Run Thread-%d/%d!\n", i+1, threadDistr.getNumberOfThreads());
 
             Thread t = new Thread(transitionThread);
             t.start();
