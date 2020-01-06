@@ -64,6 +64,7 @@ public class Parser {
                             element.add(Integer.parseInt(matcher.group().trim()));
                         }
                         catch (NumberFormatException e){
+                            //TODO: VER
                             element.add(Integer.parseInt(matcher.group().trim().substring(1)));
                         }
 
