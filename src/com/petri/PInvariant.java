@@ -5,10 +5,12 @@ import java.util.Arrays;
 
 public class PInvariant extends Invariant{
 
+    final static String INVPATH = "res/p-invariantes.txt";
+
     private Integer[] invariantTokens;
 
     public PInvariant(Integer[] initialMarking){
-        parseInvariants("res/p-invariantes.txt");
+        parseInvariants(INVPATH);
         setInvariantTokens(initialMarking);
     }
 
@@ -40,7 +42,7 @@ public class PInvariant extends Invariant{
         return true;
     }
 
-    /* Setea la suma inicial de tokens para cada invariante */
+    /* Setea la cantidad inicial de tokens para cada invariante */
     private void setInvariantTokens(Integer[] initialMarking){
 
         invariantTokens = new Integer[invariantList.size()];
