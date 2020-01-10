@@ -51,6 +51,7 @@ public class GestorDeMonitor {
 
                 /* Controlo invariantes */
                 if(!pInvariant.checkInvariants(petriNet.getCurrentMarking())){
+                    //TODO: Exception
                     System.out.println("TA TO ROTO");
                 }
 

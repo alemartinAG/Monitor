@@ -1,5 +1,7 @@
 package com.petri;
 
+import com.util.Parser;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,15 +12,23 @@ import java.util.regex.Pattern;
 
 public class TInvariant extends Invariant {
 
+    final static String LOGPATH = "res/log.txt";
+    final static String INVPATH = "res/t-invariantes.txt";
+
+    private ArrayList<ArrayList<Integer>> stateList;
+
     private ArrayList<Integer> partialInvariants;
+
     public TInvariant(){
-        parseInvariants("res/t-invariantes.txt");
+        parseInvariants(INVPATH);
         partialInvariants = new ArrayList<>();
+        stateList = parseLogStates();
     }
 
     public TInvariant(String file){
         parseInvariants(file);
         partialInvariants = new ArrayList<>();
+        stateList = parseLogStates();
     }
 
 
@@ -31,7 +41,7 @@ public class TInvariant extends Invariant {
         String data = "";
 
         try {
-            data = new String(Files.readAllBytes(Paths.get("res/log.txt")));
+            data = new String(Files.readAllBytes(Paths.get(LOGPATH)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,9 +74,14 @@ public class TInvariant extends Invariant {
         }
 
         System.out.println(Arrays.toString(petri.getCurrentMarking()));
-        System.out.println(Arrays.toString());
+        System.out.println(Arrays.toString(stateList.get(stateList.size()-1).toArray()));
 
         //TODO: Parse log final state
-        return Arrays.equals(, petri.getCurrentMarking());
+        return Arrays.equals(stateList.get(stateList.size()-1).toArray(), petri.getCurrentMarking());
+    }
+
+    /* Se encarga de parsear los estados del log */
+    private ArrayList<ArrayList<Integer>> parseLogStates(){
+        return new Parser(LOGPATH, "\\d+", "[", "]").getParsedElements();
     }
 }
