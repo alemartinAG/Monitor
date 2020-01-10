@@ -1,4 +1,4 @@
-package com.petri;
+    package com.petri;
 
 import com.util.Parser;
 
@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public abstract class Invariant {
 
-    final static String LOGPATH = "res/log.txt";
     ArrayList<ArrayList<Integer>> invariantList;
 
     /* Se encarga de comprobar que se cumplan las invariantes */
@@ -16,6 +15,5 @@ public abstract class Invariant {
     void parseInvariants(String file){
         invariantList = new Parser(file, "\\d+", "(", ")").getParsedElements();
     }
-
 
 }

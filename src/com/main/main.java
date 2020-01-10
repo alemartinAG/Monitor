@@ -39,23 +39,14 @@ public class main {
         }
 
         try {
-            System.out.println("Espera el main ....");
             barrier.await();
 
         } catch (InterruptedException | BrokenBarrierException e) {
             e.printStackTrace();
         }
 
-        System.out.println("Continua el main ....");
-
-
-
-
-//        PInvariant pinv = new PInvariant();
-//        System.out.println("P INVARIANTES: "+pinv.checkInvariants(pn.getInitialMarking()));
-//
         TInvariant tinv = new TInvariant();
-        System.out.println("T INVARIANTES: "+tinv.checkInvariants(pn.getCurrentMarking()));
+
     }
 
 }

@@ -41,6 +41,9 @@ public class PetriNet {
     private Integer[]   initialMarking;
     private Integer[]   currentMarking;
 
+    //TODO: ver, inicializacion con null's
+    private Time[] timedTransitions;
+
     public PetriNet(){
 
         // Parseo el archivo .html de las matrices de la red de petri generado por PIPE
@@ -51,6 +54,9 @@ public class PetriNet {
 
         /* Obtengo las matrices de enteros a partir de las lineas de texto generadas previamente */
         setMatrices();
+
+        // Obtengo transiciones con tiempo
+        setTimedTransitions();
 
     }
 
@@ -192,13 +198,30 @@ public class PetriNet {
                     enabledTransitions[t] = false;
                     break;
                 }
+                //TODO: ver matriz de inhibición
             }
+
+            /*if timed-transition -> if(enabledTrasition[t]): testVentana */
+            if(timedTransitions[t] != null && enabledTransitions[t]){
+                timedTransitions[t].testVentana();
+            }
+            
         }
 
-        //TODO: ver matriz de inhibición
+        
+
+        
 
         return enabledTransitions;
 
+    }
+
+    private void setTimedTransitions(){
+        //ntimed Integer[] = Leer archivo
+        timedTransitions = new Time[nTransitions];
+        Arrays.fill(timedTransitions, null);
+
+        //for(ntimed.size){timedTransitions[i] = new Time(alfa, beta);}
     }
 
     /* Se encarga de inicializar las matrices */
@@ -207,7 +230,7 @@ public class PetriNet {
         backwardMatrix      =   parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
         forwardMatrix       =   parseMatrix(tableList.get(FIM), nPlaces, nTransitions);
         inhibitionMatrix    =   parseMatrix(tableList.get(INM), nPlaces, nTransitions);
-        initialMarking =   parseMatrix(tableList.get(MRK), nPlaces);
+        initialMarking      =   parseMatrix(tableList.get(MRK), nPlaces);
         currentMarking      =   initialMarking.clone();
     }
 
