@@ -202,9 +202,9 @@ public class PetriNet {
             }
 
             /*if timed-transition -> if(enabledTrasition[t]): testVentana */
-            if(timedTransitions[t] != null && enabledTransitions[t]){
+            /*if(timedTransitions[t] != null && enabledTransitions[t]){
                 timedTransitions[t].testVentana();
-            }
+            }*/
             
         }
 

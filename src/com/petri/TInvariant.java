@@ -1,5 +1,6 @@
 package com.petri;
 
+import com.errors.IllegalPetriStateException;
 import com.util.Parser;
 
 import java.io.IOException;
@@ -12,31 +13,27 @@ import java.util.regex.Pattern;
 
 public class TInvariant extends Invariant {
 
-    final static String LOGPATH = "res/log.txt";
-    final static String INVPATH = "res/t-invariantes.txt";
+    private final static String LOGPATH = "res/log.txt";
+    private final static String INVPATH = "res/t-invariantes.txt";
 
     private ArrayList<ArrayList<Integer>> stateList;
 
-    private ArrayList<Integer> partialInvariants;
-
     public TInvariant(){
         parseInvariants(INVPATH);
-        partialInvariants = new ArrayList<>();
         stateList = parseLogStates();
     }
 
     public TInvariant(String file){
         parseInvariants(file);
-        partialInvariants = new ArrayList<>();
         stateList = parseLogStates();
     }
 
 
-    /* TODO:   Chequea que tras disparar las transiciones de la invariante, de manera ordenada,
-        el marcado (o estado) de la red, sea el mismo en el que se encontraba antes de
-        disparar la primer transicion del conjunto */
+    /* Chequea que tras disparar las transiciones restantes, luego de remover las pertenecientes a una
+         invariante de transición, de manera ordenada, el marcado (o estado) de la red,
+         sea el mismo en el que se encontraba tras disparar la última transición de la simulación */
     @Override
-    public boolean checkInvariants(Integer[] initialState) {
+    public boolean checkInvariants(Integer[] initialState) throws IllegalPetriStateException {
 
         String data = "";
 
@@ -65,19 +62,23 @@ public class TInvariant extends Invariant {
         Pattern pattern = Pattern.compile("(T\\d+)");
         Matcher matcher = pattern.matcher(data);
 
-        PetriNet petri = new PetriNet();
+        PetriNet petriTest = new PetriNet();
 
         while (matcher.find()) {
             int partial = Integer.parseInt(matcher.group().replaceAll("T", ""));
-            partialInvariants.add(partial);
-            petri.trigger(partial-1);
+            petriTest.trigger(partial-1);
         }
 
-        System.out.println(Arrays.toString(petri.getCurrentMarking()));
-        System.out.println(Arrays.toString(stateList.get(stateList.size()-1).toArray()));
+//        System.out.println(Arrays.toString(petriTest.getCurrentMarking()));
+//        System.out.println(Arrays.toString(stateList.get(stateList.size()-1).toArray()));
 
-        //TODO: Parse log final state
-        return Arrays.equals(stateList.get(stateList.size()-1).toArray(), petri.getCurrentMarking());
+        //TODO: ANDA DE VEZ EN CUANDO, VER COMO ES REALMENTE
+        if(Arrays.equals(stateList.get(stateList.size()-1).toArray(), petriTest.getCurrentMarking())){
+            return true;
+        }
+        else {
+            throw new IllegalPetriStateException("T-Invariants are not met");
+        }
     }
 
     /* Se encarga de parsear los estados del log */

@@ -1,11 +1,13 @@
 package com.petri;
 
+import com.errors.IllegalPetriStateException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PInvariant extends Invariant{
 
-    final static String INVPATH = "res/p-invariantes.txt";
+    private final static String INVPATH = "res/p-invariantes.txt";
 
     private Integer[] invariantTokens;
 
@@ -22,7 +24,7 @@ public class PInvariant extends Invariant{
     /* Chequea que la suma de tokens en las plazas
     de la invariante se mantenga siempre igual */
     @Override
-    public boolean checkInvariants(Integer[] currentMarking) {
+    public boolean checkInvariants(Integer[] currentMarking) throws IllegalPetriStateException {
 
         int index = 0;
         for (ArrayList<Integer> invariant : invariantList) {
@@ -33,7 +35,7 @@ public class PInvariant extends Invariant{
             }
 
             if (invariantCurrentTokens != invariantTokens[index]) {
-                return false;
+                throw new IllegalPetriStateException("P-Invariants are not met");
             }
 
             index++;

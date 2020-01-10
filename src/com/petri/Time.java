@@ -1,5 +1,7 @@
 package com.petri;
 
+import java.util.Date;
+
 public class Time {
 
     private int alpha, beta;

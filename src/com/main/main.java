@@ -1,7 +1,7 @@
 package com.main;
 
+import com.errors.IllegalPetriStateException;
 import com.monitor.GestorDeMonitor;
-import com.petri.PInvariant;
 import com.petri.PetriNet;
 import com.petri.TInvariant;
 import com.util.ThreadDistribution;
@@ -46,6 +46,12 @@ public class main {
         }
 
         TInvariant tinv = new TInvariant();
+
+        try {
+            tinv.checkInvariants(pn.getInitialMarking());
+        } catch (IllegalPetriStateException e) {
+            e.printStackTrace();
+        }
 
     }
 

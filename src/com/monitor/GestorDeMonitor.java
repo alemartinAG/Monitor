@@ -1,5 +1,6 @@
 package com.monitor;
 
+import com.errors.IllegalPetriStateException;
 import com.petri.PInvariant;
 import com.petri.PetriNet;
 import com.util.Log;
@@ -50,9 +51,11 @@ public class GestorDeMonitor {
             if(result){
 
                 /* Controlo invariantes */
-                if(!pInvariant.checkInvariants(petriNet.getCurrentMarking())){
-                    //TODO: Exception
-                    System.out.println("TA TO ROTO");
+                try {
+                    pInvariant.checkInvariants(petriNet.getCurrentMarking());
+                } catch (IllegalPetriStateException e) {
+                    e.printStackTrace();
+                    return;
                 }
 
                 /* Disparo la cantidad de transiciones especificadas */
