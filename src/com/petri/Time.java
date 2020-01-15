@@ -1,37 +1,59 @@
 package com.petri;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Time {
 
     private int alpha, beta;
-    private Date timeStamp;
-    
+    private boolean beforeWindow, waiting = false;
+    private Timestamp timeStamp;
+
     public Time(int alpha, int beta) {
-        this.alpha = alpha;
-        this.beta = beta;
+        this.alpha = alpha * 1000;
+        this.beta = beta * 1000;
+        this.timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
-    boolean testTimeWindow(){
+    boolean testTimeWindow() {
+
+        long now = System.currentTimeMillis() - timeStamp.getTime();
+
+        if (now >= alpha && now <= beta) {
+            return true;
+        } else {
+            // Compruebo si estoy antes de la ventana
+            if (now < alpha) {
+                beforeWindow = true;
+            } else {
+                beforeWindow = false;
+            }
+        }
+
         return false;
     }
 
-    void setNewTimeStamp(){
-        this.timeStamp = new Date();
+    void setNewTimeStamp() {
+        this.timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
-    void beforeWindow(){
-
+    boolean beforeWindow() {
+        return beforeWindow;
     }
 
-    void setWaiting(){
-
+    void setWaiting() {
+        waiting = true;
     }
 
-    void resetWaiting(){
+    boolean isWaiting(){
+        return waiting;
+    }
+
+    long getSleepTime(){
+        return timeStamp.getTime() + alpha*1000 - System.currentTimeMillis();
+    }
+
+    void resetWaiting() {
 
     }
 
 }
-
-

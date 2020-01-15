@@ -13,7 +13,7 @@ public abstract class Invariant {
     abstract public boolean checkInvariants(Integer[] initialState) throws IllegalPetriStateException;
 
     /* Se encarga de parsear el documento que especifica las invariantes */
-    void parseInvariants(String file){
+    void parseInvariants(String file) {
         invariantList = new Parser(file, "\\d+", "(", ")").getParsedElements();
     }
 

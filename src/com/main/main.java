@@ -12,7 +12,7 @@ import java.util.concurrent.CyclicBarrier;
 
 public class main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         PetriNet pn = new PetriNet();
         GestorDeMonitor monitor = new GestorDeMonitor(pn, 200);
@@ -24,14 +24,14 @@ public class main {
 
         int n_threads = threadDistr.getNumberOfThreads();
 
-        CyclicBarrier barrier = new CyclicBarrier(n_threads+1);
+        CyclicBarrier barrier = new CyclicBarrier(n_threads + 1);
 
-        for(int i=0; i<n_threads; i++){
+        for (int i = 0; i < n_threads; i++) {
 
             TransitionThread transitionThread = new TransitionThread(i, threadDistr.getTransitionsOfThread(i), barrier);
             transitionThread.setMonitor(monitor);
 
-            System.out.printf("Run Thread-%d/%d!\n", i+1, threadDistr.getNumberOfThreads());
+            System.out.printf("Run Thread-%d/%d!\n", i + 1, threadDistr.getNumberOfThreads());
 
             Thread t = new Thread(transitionThread);
             t.start();

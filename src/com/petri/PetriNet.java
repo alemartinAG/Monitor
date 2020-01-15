@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+import com.util.Parser;
 
 public class PetriNet {
 
@@ -29,22 +29,23 @@ public class PetriNet {
     public static final int CURRENT = 1;
 
     private static final String PETRI = "res/petri.html"; // matrices file's path
+    private static final String TIMED = "res/timed-transitions.txt";
 
-    private int nPlaces = 0;        // number of places in the petri net
-    private int nTransitions = 0;   // number of transitions in the petri net
+    private int nPlaces = 0; // number of places in the petri net
+    private int nTransitions = 0; // number of transitions in the petri net
 
     private ArrayList<String> tableList;
     private Integer[][] combinedIMatrix;
     private Integer[][] backwardMatrix;
     private Integer[][] forwardMatrix;
     private Integer[][] inhibitionMatrix;
-    private Integer[]   initialMarking;
-    private Integer[]   currentMarking;
+    private Integer[] initialMarking;
+    private Integer[] currentMarking;
 
-    //TODO: ver, inicializacion con null's
+    // TODO: ver, inicializacion con null's
     private Time[] timedTransitions;
 
-    public PetriNet(){
+    public PetriNet() {
 
         // Parseo el archivo .html de las matrices de la red de petri generado por PIPE
         tableList = getTableList(PETRI);
@@ -52,7 +53,10 @@ public class PetriNet {
         // Cuento la cantidad de plazas y transiciones
         countPlacesAndTransitions();
 
-        /* Obtengo las matrices de enteros a partir de las lineas de texto generadas previamente */
+        /*
+         * Obtengo las matrices de enteros a partir de las lineas de texto generadas
+         * previamente
+         */
         setMatrices();
 
         // Obtengo transiciones con tiempo
@@ -60,7 +64,7 @@ public class PetriNet {
 
     }
 
-    public PetriNet(String file){
+    public PetriNet(String file) {
 
         // Parseo el archivo .html de las matrices de la red de petri generado por PIPE
         tableList = getTableList(file);
@@ -68,19 +72,30 @@ public class PetriNet {
         // Cuento la cantidad de plazas y transiciones
         countPlacesAndTransitions();
 
-        /* Obtengo las matrices de enteros a partir de las lineas de texto generadas previamente */
+        /*
+         * Obtengo las matrices de enteros a partir de las lineas de texto generadas
+         * previamente
+         */
         setMatrices();
+
+        // Obtengo transiciones con tiempo
+        setTimedTransitions();
 
     }
 
     /* Se encarga de disparar una transicion y actualizar el marcado de la red */
     public boolean trigger(int transition) {
 
-        /* Si la transición a disparar no se encuentra
-        sensibilizada devuelvo falso */
-        if(!areEnabled()[transition]){
+        /*
+         * Si la transición a disparar no se encuentra sensibilizada devuelvo falso
+         */
+        if (!isEnabled(transition)) {
             return false;
         }
+
+        /*
+         * if (!areEnabled()[transition]) { return false; }
+         */
 
         /* Genero vector delta para calcular función de transferencia */
         Integer[] delta = new Integer[nTransitions];
@@ -91,79 +106,85 @@ public class PetriNet {
         Arrays.fill(tf, 0);
 
         /* Cálculo del nuevo marcado a partir de la ecuación de estado */
-        for(int i=0; i<nPlaces; i++){
-            for(int j=0; j<nTransitions; j++){
+        for (int i = 0; i < nPlaces; i++) {
+            for (int j = 0; j < nTransitions; j++) {
                 // Funcion de transferencia = I x delta
                 tf[i] += combinedIMatrix[i][j] * delta[j];
             }
             // M(i+1) = M(i) + I * delta
-            currentMarking[i] = currentMarking[i]+tf[i];
+            currentMarking[i] = currentMarking[i] + tf[i];
         }
 
-        //La transicion se disparo exitosamente
+        // La transicion se disparo exitosamente
         return true;
     }
 
     /* Debugging, imprime la sensibilizacion de las transiciones */
-    protected void printEnabled(){
+    protected void printEnabled() {
         System.out.print("Enabled Transitions: ");
         boolean[] enabledTransitions = areEnabled();
-        for(int i=0; i<enabledTransitions.length; i++){
-            System.out.printf(" | T%d: %s | ", i+1, enabledTransitions[i]);
+        for (int i = 0; i < enabledTransitions.length; i++) {
+            System.out.printf(" | T%d: %s | ", i + 1, enabledTransitions[i]);
         }
         System.out.print("\n\n");
     }
 
     /* Debugging, impime el marcado actual */
-    protected void printCurrentMarking(){
+    protected void printCurrentMarking() {
         System.out.println("Current Marking");
         printMatrix(currentMarking);
     }
 
     /* Devuelve el marcado inicial de la red */
-    public Integer[] getInitialMarking(){
+    public Integer[] getInitialMarking() {
         return initialMarking;
     }
 
     /* Devuelve el marcado actual de la red */
-    public Integer[] getCurrentMarking(){
+    public Integer[] getCurrentMarking() {
         return currentMarking;
     }
 
     /* Devuelve la matriz especificada */
-    public Integer[][] getMatrix(int index){
+    public Integer[][] getMatrix(int index) {
 
-        Integer[][] def = {{0},{0}};
-        Integer[][] marking = {initialMarking.clone(), currentMarking.clone()};
+        Integer[][] def = { { 0 }, { 0 } };
+        Integer[][] marking = { initialMarking.clone(), currentMarking.clone() };
 
-        switch (index){
-            case FIM: return forwardMatrix;
-            case BIM: return backwardMatrix;
-            case CIM: return combinedIMatrix;
-            case INM: return inhibitionMatrix;
-            case MRK: return marking;
-             default: return def;
+        switch (index) {
+        case FIM:
+            return forwardMatrix;
+        case BIM:
+            return backwardMatrix;
+        case CIM:
+            return combinedIMatrix;
+        case INM:
+            return inhibitionMatrix;
+        case MRK:
+            return marking;
+        default:
+            return def;
         }
     }
 
     /* Devuelve el numero de plazas de la red */
-    public int getPlacesCount(){
+    public int getPlacesCount() {
         return nPlaces;
     }
 
     /* Devuelve el numero de transiciones de la red */
-    public int getTransitionsCount(){
+    public int getTransitionsCount() {
         return nTransitions;
     }
 
     /* Método para imprimir matrices, utilizado en el debugging */
-    public void printMatrix(Object[][] matrix){
+    public void printMatrix(Object[][] matrix) {
 
         System.out.print("\n");
 
-        for(int i=0; i<matrix.length; i++){
-            for(int j=0; j<matrix[i].length; j++){
-                System.out.printf("%3s ",matrix[i][j].toString());
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.printf("%3s ", matrix[i][j].toString());
             }
             System.out.println("");
         }
@@ -173,69 +194,110 @@ public class PetriNet {
     }
 
     /* Método para imprimir matrices, utilizado en el debugging */
-    public void printMatrix(Object[] matrix){
+    public void printMatrix(Object[] matrix) {
 
         System.out.print("\n");
 
-        for(int i=0; i<matrix.length; i++){
-            System.out.printf("%3s ",matrix[i].toString());
+        for (int i = 0; i < matrix.length; i++) {
+            System.out.printf("%3s ", matrix[i].toString());
         }
 
         System.out.print("\n\n");
 
     }
 
+    private boolean isEnabled(int transition) {
+
+        boolean[] enabledTransitions = areEnabled();
+        Time timed = timedTransitions[transition];
+
+        if (timed != null && enabledTransitions[transition]) {
+
+            if (timed.testTimeWindow()) {
+                // Está dentro de la ventana
+
+                if (!timed.isWaiting()) {
+                    timed.setNewTimeStamp();
+                } else {
+                    enabledTransitions[transition] = false;
+                }
+
+            } else {
+                // No se encuentra en la ventana
+
+                if (timed.beforeWindow()) {
+                    timed.setWaiting();
+                    
+                    //TODO: LIBERAR MUTEX??
+                    try {
+                        Thread.sleep(timed.getSleepTime());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    
+                    //TODO: VERRRR
+                    enabledTransitions[transition] = false;
+
+                }
+
+            }
+
+        }
+
+        return enabledTransitions[transition];
+    }
+
     /* Se encarga de calcular qué transiciones se encuentran sensibilizadas */
-    public boolean[] areEnabled(){
+    public boolean[] areEnabled() {
 
         boolean[] enabledTransitions = new boolean[nTransitions];
 
         Arrays.fill(enabledTransitions, true);
 
-        for(int t=0; t<nTransitions; t++){
-            for(int p=0; p<nPlaces; p++){
+        for (int t = 0; t < nTransitions; t++) {
+            for (int p = 0; p < nPlaces; p++) {
                 if (backwardMatrix[p][t] > this.currentMarking[p]) {
                     enabledTransitions[t] = false;
                     break;
                 }
-                //TODO: ver matriz de inhibición
+                // TODO: ver matriz de inhibición
             }
-
-            /*if timed-transition -> if(enabledTrasition[t]): testVentana */
-            /*if(timedTransitions[t] != null && enabledTransitions[t]){
-                timedTransitions[t].testVentana();
-            }*/
-            
         }
-
-        
-
-        
 
         return enabledTransitions;
 
     }
 
-    private void setTimedTransitions(){
-        //ntimed Integer[] = Leer archivo
+    private void setTimedTransitions() {
+
+        // Arreglo de tiempos, con tamaño = Cant. de transiciones
         timedTransitions = new Time[nTransitions];
         Arrays.fill(timedTransitions, null);
 
-        //for(ntimed.size){timedTransitions[i] = new Time(alfa, beta);}
+        // Creo lista de arreglos con N° de transición->[0], Alpha->[1], Beta->[2]
+        ArrayList<ArrayList<Integer>> timed = new Parser(TIMED, "\\d+", "(", ")").getParsedElements();
+
+        // Agrego las transiciones con tiempo al arreglo
+        for (ArrayList<Integer> transition : timed) {
+            timedTransitions[transition.get(0)] = new Time(transition.get(1), transition.get(2));
+        }
+
     }
 
     /* Se encarga de inicializar las matrices */
-    private void setMatrices(){
-        combinedIMatrix     =   parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
-        backwardMatrix      =   parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
-        forwardMatrix       =   parseMatrix(tableList.get(FIM), nPlaces, nTransitions);
-        inhibitionMatrix    =   parseMatrix(tableList.get(INM), nPlaces, nTransitions);
-        initialMarking      =   parseMatrix(tableList.get(MRK), nPlaces);
-        currentMarking      =   initialMarking.clone();
+    private void setMatrices() {
+        combinedIMatrix = parseMatrix(tableList.get(CIM), nPlaces, nTransitions);
+        backwardMatrix = parseMatrix(tableList.get(BIM), nPlaces, nTransitions);
+        forwardMatrix = parseMatrix(tableList.get(FIM), nPlaces, nTransitions);
+        inhibitionMatrix = parseMatrix(tableList.get(INM), nPlaces, nTransitions);
+        initialMarking = parseMatrix(tableList.get(MRK), nPlaces);
+        currentMarking = initialMarking.clone();
     }
 
     /* Se encarga de parsear el html que contiene las tablas */
-    private ArrayList<String> getTableList(String petriFile){
+    private ArrayList<String> getTableList(String petriFile) {
 
         File input = new File(petriFile);
 
@@ -249,29 +311,28 @@ public class PetriNet {
             e.printStackTrace();
         }
 
-        try{
+        try {
             tables = doc.getElementsByTag("table");
-        }
-        catch(NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
         int nTable = 0;
-        for(Element table : tables){
+        for (Element table : tables) {
 
-            if(nTable%2 == 0){
+            if (nTable % 2 == 0) {
                 list.add(table.text());
             }
 
             nTable++;
         }
 
-        return  list;
+        return list;
 
     }
 
     /* Se encarga de contar la cantidad de plazas y transiciones de la red */
-    private void countPlacesAndTransitions(){
+    private void countPlacesAndTransitions() {
 
         int p = 0;
         int t = 0;
@@ -286,7 +347,7 @@ public class PetriNet {
         pattern = Pattern.compile("T\\d");
         matcher = pattern.matcher(tableList.get(FIM));
 
-        while (matcher.find()){
+        while (matcher.find()) {
             t++;
         }
 
@@ -296,7 +357,7 @@ public class PetriNet {
     }
 
     /* Se encarga de generar matrices (2d) a partir de un String */
-    private Integer[][] parseMatrix(String plainText, int rows, int columns){
+    private Integer[][] parseMatrix(String plainText, int rows, int columns) {
 
         Integer[][] matrix = new Integer[rows][columns];
 
@@ -304,10 +365,10 @@ public class PetriNet {
         Pattern pattern = Pattern.compile("\\s-?\\d+");
         Matcher matcher = pattern.matcher(plainText);
 
-        for(int i=0; i<rows; i++){
-            for(int j=0; j<columns; j++){
-                if(matcher.find())
-                matrix[i][j] = Integer.parseInt(matcher.group().trim());
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (matcher.find())
+                    matrix[i][j] = Integer.parseInt(matcher.group().trim());
             }
         }
 
@@ -315,16 +376,16 @@ public class PetriNet {
     }
 
     /* Se encarga de generar matrices (1d) a partir de un String */
-    private Integer[] parseMatrix(String plainText, int columns){
+    private Integer[] parseMatrix(String plainText, int columns) {
 
         Integer[] matrix = new Integer[columns];
 
         Pattern pattern = Pattern.compile("\\s-?\\d+");
         Matcher matcher = pattern.matcher(plainText);
 
-        for(int j=0; j<columns; j++){
-            if(matcher.find())
-            matrix[j] = Integer.parseInt(matcher.group().trim());
+        for (int j = 0; j < columns; j++) {
+            if (matcher.find())
+                matrix[j] = Integer.parseInt(matcher.group().trim());
         }
 
         return matrix;
