@@ -1,5 +1,6 @@
 
 import com.petri.PetriNet;
+import com.petri.Time;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +8,9 @@ import org.junit.Test;
 import java.util.Arrays;
 
 public class PetriNetTest {
+
+    private static final String PETRI = "res/petri-test.html";
+    private static final String TIMED = "res/timed-test.txt";
 
     private PetriNet pn;
     private final static int TRANSITIONS = 6;
@@ -25,22 +29,28 @@ public class PetriNetTest {
     private final static boolean[] enabled = {true, false, false, true, false, false};
     private final static boolean[] enabled_t1 = {false, true, false, false, false, false};
     private final static boolean[] enabled_t4 = {false, false, false, false, true, false};
+    private Time[] timed_t1 = new Time[TRANSITIONS];
 
 
     private int[][] INHIBITION;
 
     @Before
     public void setUp() throws Exception {
-        pn = new PetriNet("res/petri-test.html");
+
+        pn = new PetriNet(PETRI, TIMED);
         INHIBITION = new int[PLACES][TRANSITIONS];
 
         for(int i=0; i<PLACES; i++){
             Arrays.fill(INHIBITION[i], 0);
         }
 
+        Arrays.fill(timed_t1, null);
+        timed_t1[0] = new Time(10, 20);
+        timed_t1[2] = new Time(10, 20);
+
     }
 
-    @Test
+    /*@Test
     public void triggerLogicTest() {
 
         Assert.assertTrue(pn.trigger(0));
@@ -55,7 +65,7 @@ public class PetriNetTest {
         Assert.assertTrue(pn.trigger(4));
         Assert.assertTrue(pn.trigger(5));
 
-    }
+    }*/
 
     @Test
     public void countTest() {
@@ -73,7 +83,7 @@ public class PetriNetTest {
 
     }
 
-    @Test
+    /*@Test
     public void areEnabledTest() {
 
         Assert.assertArrayEquals(enabled, pn.areEnabled());
@@ -86,6 +96,24 @@ public class PetriNetTest {
 
         pn.trigger(3);
         Assert.assertArrayEquals(enabled_t4, pn.areEnabled());
+    }*/
+
+    @Test
+    public void setTimedTransitionsTest(){
+        Time[] timedTransitions = pn.getTimedTransitions();
+
+        for(int i=0; i<TRANSITIONS; i++){
+
+           if(timed_t1[i] == null && timedTransitions[i] != null){
+               Assert.fail();
+           }
+
+
+           if(timed_t1[i] != null) {
+               Assert.assertEquals(timed_t1[i].getAlpha(), timedTransitions[i].getAlpha());
+               Assert.assertEquals(timed_t1[i].getBeta(), timedTransitions[i].getBeta());
+           }
+        }
     }
 
 }

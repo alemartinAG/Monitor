@@ -60,14 +60,14 @@ public class PetriNet {
         setMatrices();
 
         // Obtengo transiciones con tiempo
-        setTimedTransitions();
+        setTimedTransitions(TIMED);
 
     }
 
-    public PetriNet(String file) {
+    public PetriNet(String petri_file, String timed_file) {
 
         // Parseo el archivo .html de las matrices de la red de petri generado por PIPE
-        tableList = getTableList(file);
+        tableList = getTableList(petri_file);
 
         // Cuento la cantidad de plazas y transiciones
         countPlacesAndTransitions();
@@ -79,7 +79,7 @@ public class PetriNet {
         setMatrices();
 
         // Obtengo transiciones con tiempo
-        setTimedTransitions();
+        setTimedTransitions(timed_file);
 
     }
 
@@ -270,21 +270,23 @@ public class PetriNet {
 
     }
 
-    private void setTimedTransitions() {
+    private void setTimedTransitions(String file) {
 
         // Arreglo de tiempos, con tamaño = Cant. de transiciones
         timedTransitions = new Time[nTransitions];
         Arrays.fill(timedTransitions, null);
 
         // Creo lista de arreglos con N° de transición->[0], Alpha->[1], Beta->[2]
-        ArrayList<ArrayList<Integer>> timed = new Parser(TIMED, "\\d+", "(", ")").getParsedElements();
+        ArrayList<ArrayList<Integer>> timed = new Parser(file, "\\d+", "(", ")").getParsedElements();
 
         // Agrego las transiciones con tiempo al arreglo
         for (ArrayList<Integer> transition : timed) {
-            timedTransitions[transition.get(0)] = new Time(transition.get(1), transition.get(2));
+            timedTransitions[transition.get(0)-1] = new Time(transition.get(1), transition.get(2));
         }
 
     }
+
+    public Time[] getTimedTransitions(){return timedTransitions;}
 
     /* Se encarga de inicializar las matrices */
     private void setMatrices() {

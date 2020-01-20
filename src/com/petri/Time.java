@@ -4,13 +4,14 @@ import java.sql.Timestamp;
 
 public class Time {
 
+    private final static int RATIO = 1000;
     private int alpha, beta;
     private boolean beforeWindow, waiting = false;
     private Timestamp timeStamp;
 
     public Time(int alpha, int beta) {
-        this.alpha = alpha * 1000;
-        this.beta = beta * 1000;
+        this.alpha = alpha * RATIO;
+        this.beta = beta * RATIO;
         this.timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
@@ -55,5 +56,8 @@ public class Time {
     void resetWaiting() {
 
     }
+
+    public int getAlpha(){return alpha/RATIO;}
+    public int getBeta(){return beta/RATIO;}
 
 }
