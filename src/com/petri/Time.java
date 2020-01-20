@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class Time {
 
+    // Alpha y Beta se multiplican por mil para obtener segundos!
     private int alpha, beta;
     private boolean beforeWindow, waiting = false;
     private Timestamp timeStamp;
@@ -14,7 +15,7 @@ public class Time {
         this.timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
-    boolean testTimeWindow() {
+    public boolean testTimeWindow() {
 
         long now = System.currentTimeMillis() - timeStamp.getTime();
 
@@ -32,28 +33,32 @@ public class Time {
         return false;
     }
 
-    void setNewTimeStamp() {
+    public void setNewTimeStamp() {
         this.timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
-    boolean beforeWindow() {
+    public boolean beforeWindow() {
         return beforeWindow;
     }
 
-    void setWaiting() {
+    public void setWaiting() {
         waiting = true;
     }
 
-    boolean isWaiting(){
+    public boolean isWaiting(){
         return waiting;
     }
 
-    long getSleepTime(){
-        return timeStamp.getTime() + alpha*1000 - System.currentTimeMillis();
+    public long getSleepTime(){
+        return timeStamp.getTime() + alpha - System.currentTimeMillis();
     }
 
-    void resetWaiting() {
+    public void resetWaiting() {
 
+    }
+
+    public Timestamp getTimestamp () {
+        return timeStamp;
     }
 
 }
