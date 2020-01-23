@@ -1,5 +1,6 @@
 package com.petri;
 
+import com.errors.OutsideWindowException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,7 +29,7 @@ public class PetriNet {
     public static final int INITIAL = 0;
     public static final int CURRENT = 1;
 
-    private static final String PETRI = "res/petri.html"; // matrices file's path
+    private static final String PETRI = "res/petri-timed.html"; // matrices file's path
     private static final String TIMED = "res/timed-transitions.txt";
 
     private int nPlaces = 0; // number of places in the petri net
@@ -59,6 +60,8 @@ public class PetriNet {
          */
         setMatrices();
 
+        checkMarking();
+
         // Obtengo transiciones con tiempo
         setTimedTransitions(TIMED);
 
@@ -83,14 +86,35 @@ public class PetriNet {
 
     }
 
+    private void checkMarking(){
+
+        for (Integer tokens : currentMarking) {
+            if (tokens > 0) {
+                return;
+            }
+        }
+
+        //TODO: tirar warning e interrumpit ejecucion; o chequear deadlock directamente
+        System.out.println("The net does not have any token in it's initial marking");
+
+
+    }
+
     /* Se encarga de disparar una transicion y actualizar el marcado de la red */
-    public boolean trigger(int transition) {
+    public boolean trigger(int transition) throws OutsideWindowException {
 
         /*
          * Si la transición a disparar no se encuentra sensibilizada devuelvo falso
          */
         if (!isEnabled(transition)) {
             return false;
+        }
+
+        Time timed = timedTransitions[transition];
+
+        if (timed != null && !timed.testTimeWindow()) {
+            //No esta dentro de la ventana
+            throw new OutsideWindowException();
         }
 
         /*
@@ -208,45 +232,22 @@ public class PetriNet {
 
     private boolean isEnabled(int transition) {
 
-        boolean[] enabledTransitions = areEnabled();
-        Time timed = timedTransitions[transition];
+        return areEnabled()[transition];
+
+        //boolean[] enabledTransitions = areEnabled();
+        /*Time timed = timedTransitions[transition];
 
         if (timed != null && enabledTransitions[transition]) {
 
-            if (timed.testTimeWindow()) {
-                // Está dentro de la ventana
+            if (!timed.testTimeWindow()) {
 
-                if (!timed.isWaiting()) {
-                    timed.setNewTimeStamp();
-                } else {
-                    enabledTransitions[transition] = false;
-                }
-
-            } else {
-                // No se encuentra en la ventana
-
-                if (timed.beforeWindow()) {
-                    timed.setWaiting();
-                    
-                    //TODO: LIBERAR MUTEX??
-                    try {
-                        Thread.sleep(timed.getSleepTime());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    
-                    //TODO: VERRRR
-                    enabledTransitions[transition] = false;
-
-                }
+                //No esta dentro de la ventana
+                enabledTransitions[transition] = false;
 
             }
+        }*/
 
-        }
-
-        return enabledTransitions[transition];
+        //return enabledTransitions[transition];
     }
 
     /* Se encarga de calcular qué transiciones se encuentran sensibilizadas */
@@ -263,6 +264,9 @@ public class PetriNet {
                     break;
                 }
                 // TODO: ver matriz de inhibición
+            }
+            if(enabledTransitions[t] && timedTransitions[t] != null){
+                timedTransitions[t].setNewTimeStamp();
             }
         }
 

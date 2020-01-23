@@ -45,13 +45,13 @@ public class main {
             e.printStackTrace();
         }
 
-        TInvariant tinv = new TInvariant();
+        /*TInvariant tinv = new TInvariant();
 
         try {
             tinv.checkInvariants(pn.getInitialMarking());
         } catch (IllegalPetriStateException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 

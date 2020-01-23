@@ -66,7 +66,7 @@ public class TInvariant extends Invariant {
 
         while (matcher.find()) {
             int partial = Integer.parseInt(matcher.group().replaceAll("T", ""));
-            petriTest.trigger(partial-1);
+            //petriTest.trigger(partial-1);
         }
 
 //        System.out.println(Arrays.toString(petriTest.getCurrentMarking()));

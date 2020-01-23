@@ -15,7 +15,7 @@ public class Time {
     public Time(int alpha, int beta) {
         this.alpha = alpha * RATIO;
         this.beta = beta * RATIO;
-        this.timeStamp = new Timestamp(System.currentTimeMillis());
+        //this.timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
     public boolean testTimeWindow() {
@@ -24,24 +24,34 @@ public class Time {
 
         if (now >= alpha && now <= beta) {
             return true;
-        } else {
+        } /*else {
             // Compruebo si estoy antes de la ventana
             if (now < alpha) {
                 beforeWindow = true;
             } else {
                 beforeWindow = false;
             }
-        }
+        }*/
 
         return false;
     }
 
     public void setNewTimeStamp() {
-        this.timeStamp = new Timestamp(System.currentTimeMillis());
+        timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
+
     public boolean beforeWindow() {
-        return beforeWindow;
+        long now = System.currentTimeMillis() - timeStamp.getTime();
+
+        if (now < alpha) {
+            return true;
+        }
+
+        return false;
+
+
+        //return beforeWindow;
     }
 
     public void setWaiting() {
@@ -53,7 +63,10 @@ public class Time {
     }
 
     public long getSleepTime(){
-        return timeStamp.getTime() + alpha - System.currentTimeMillis();
+        long enabledTime = timeStamp.getTime();
+        long now = System.currentTimeMillis();
+        long sum = (enabledTime + alpha) - now;
+        return (sum);
     }
 
     public void resetWaiting() {

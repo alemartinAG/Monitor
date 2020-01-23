@@ -1,8 +1,10 @@
 package com.monitor;
 
 import com.errors.IllegalPetriStateException;
+import com.errors.OutsideWindowException;
 import com.petri.PInvariant;
 import com.petri.PetriNet;
+import com.petri.Time;
 import com.util.Log;
 import com.util.Mutex;
 
@@ -48,66 +50,113 @@ public class GestorDeMonitor {
 
         while (k) {
 
-            result = petriNet.trigger(transition);
+            try {
 
-            if (result) {
+                System.out.printf("Pruebo disparar la transicion %d!\n",transition);
 
-                /* Controlo invariantes */
-                try {
-                    pInvariant.checkInvariants(petriNet.getCurrentMarking());
-                } catch (IllegalPetriStateException e) {
-                    keeprunning = false;
-                    e.printStackTrace();
-                    return;
+                result = petriNet.trigger(transition);
+
+                if (result) {
+
+                    /* Controlo invariantes */
+                    try {
+                        pInvariant.checkInvariants(petriNet.getCurrentMarking());
+                    } catch (IllegalPetriStateException e) {
+                        keeprunning = false;
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    /* Disparo la cantidad de transiciones especificadas */
+                    transitionsLeft--;
+                    if (transitionsLeft < 0) {
+                        keeprunning = false;
+                        mutex.release();
+                        return;
+                    }
+
+                    System.out.printf("%3d | Transition %d triggered\n", transitionsTotal - transitionsLeft,
+                            transition + 1);
+                    String currentMarking = Arrays.toString(petriNet.getMatrix(PetriNet.MRK)[PetriNet.CURRENT]);
+                    eventLog.log(String.format("T%d%sMarking: %s", transition + 1, Log.SEPARATOR, currentMarking));
+
+                    boolean[] enabledVector = petriNet.areEnabled().clone();
+                    boolean[] queueVector = queues.getQueued().clone();
+                    boolean[] andVector = new boolean[petriNet.getTransitionsCount()];
+                    Arrays.fill(andVector, false);
+
+                    boolean m = false;
+
+                    /* Calculo del vector AND */
+                    for (int i = 0; i < petriNet.getTransitionsCount(); i++) {
+                        if (queueVector[i] && enabledVector[i]) {
+                            andVector[i] = true;
+                            m = true;
+                        }
+                    }
+
+                    if (m) {
+                        // System.out.println("m>=0 // Despierto");
+                        queues.wakeThread(policy.getNext(andVector));
+                        return;
+                    } else {
+                        // System.out.println("m<0 // k=false");
+                        k = false;
+                    }
+
+                } else {
+
+                    Time timed = petriNet.getTimedTransitions()[transition];
+
+                    if(timed != null){
+                        if(timed.beforeWindow()){
+
+                            mutex.release();
+
+                            try {
+                                Thread.sleep(timed.getSleepTime());
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else{
+                            k = false;
+                        }
+                    }
+                    else{
+                        mutex.release();
+                        queues.sleepThread(transition);
+                    }
+                    // System.out.printf("THREAD %s WENT TO SLEEP\n",
+                    // Thread.currentThread().getName());
+                    // System.out.printf("[%s] Mutex released by Thread-%s and went to SLEEP\n",
+                    // (new
+                    // Timestamp(System.currentTimeMillis())),Thread.currentThread().getName());
                 }
 
-                /* Disparo la cantidad de transiciones especificadas */
-                transitionsLeft--;
-                if (transitionsLeft < 0) {
-                    keeprunning = false;
+
+            } catch (OutsideWindowException e) {
+
+                Time timed = petriNet.getTimedTransitions()[transition];
+
+                if(timed.beforeWindow()){
+
                     mutex.release();
-                    return;
-                }
 
-                System.out.printf("%3d | Transition %d triggered\n", transitionsTotal - transitionsLeft,
-                        transition + 1);
-                String currentMarking = Arrays.toString(petriNet.getMatrix(PetriNet.MRK)[PetriNet.CURRENT]);
-                eventLog.log(String.format("T%d%sMarking: %s", transition + 1, Log.SEPARATOR, currentMarking));
-
-                boolean[] enabledVector = petriNet.areEnabled().clone();
-                boolean[] queueVector = queues.getQueued().clone();
-                boolean[] andVector = new boolean[petriNet.getTransitionsCount()];
-                Arrays.fill(andVector, false);
-
-                boolean m = false;
-
-                /* Calculo del vector AND */
-                for (int i = 0; i < petriNet.getTransitionsCount(); i++) {
-                    if (queueVector[i] && enabledVector[i]) {
-                        andVector[i] = true;
-                        m = true;
+                    try {
+                        long milis = timed.getSleepTime();
+                        System.out.printf("Me duermo por la ventana unos %d milis\n", milis);
+                        Thread.sleep(milis);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
                     }
                 }
-
-                if (m) {
-                    // System.out.println("m>=0 // Despierto");
-                    queues.wakeThread(policy.getNext(andVector));
-                    return;
-                } else {
-                    // System.out.println("m<0 // k=false");
+                else {
                     k = false;
                 }
 
-            } else {
-                // System.out.printf("THREAD %s WENT TO SLEEP\n",
-                // Thread.currentThread().getName());
-                // System.out.printf("[%s] Mutex released by Thread-%s and went to SLEEP\n",
-                // (new
-                // Timestamp(System.currentTimeMillis())),Thread.currentThread().getName());
-                mutex.release();
-                queues.sleepThread(transition);
-
             }
+
 
         }
 
