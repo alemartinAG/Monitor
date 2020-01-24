@@ -43,7 +43,6 @@ public class PetriNet {
     private Integer[] initialMarking;
     private Integer[] currentMarking;
 
-    // TODO: ver, inicializacion con null's
     private Time[] timedTransitions;
 
     public PetriNet() {
@@ -112,14 +111,18 @@ public class PetriNet {
 
         Time timed = timedTransitions[transition];
 
-        if (timed != null && !timed.testTimeWindow()) {
-            //No esta dentro de la ventana
-            throw new OutsideWindowException();
-        }
+        if (timed != null ) {
 
-        /*
-         * if (!areEnabled()[transition]) { return false; }
-         */
+            if(!timed.testTimeWindow()){
+                //No esta dentro de la ventana
+                timed.setWaiting();
+                throw new OutsideWindowException(timed.beforeWindow(), timed.getSleepTime());
+            }
+
+            timed.resetWaiting();
+            System.out.printf("Tiempo de espera de T%d: %d [ms]\n", transition, timed.getElapsedTime());
+
+        }
 
         /* Genero vector delta para calcular función de transferencia */
         Integer[] delta = new Integer[nTransitions];
@@ -234,20 +237,6 @@ public class PetriNet {
 
         return areEnabled()[transition];
 
-        //boolean[] enabledTransitions = areEnabled();
-        /*Time timed = timedTransitions[transition];
-
-        if (timed != null && enabledTransitions[transition]) {
-
-            if (!timed.testTimeWindow()) {
-
-                //No esta dentro de la ventana
-                enabledTransitions[transition] = false;
-
-            }
-        }*/
-
-        //return enabledTransitions[transition];
     }
 
     /* Se encarga de calcular qué transiciones se encuentran sensibilizadas */
@@ -265,7 +254,7 @@ public class PetriNet {
                 }
                 // TODO: ver matriz de inhibición
             }
-            if(enabledTransitions[t] && timedTransitions[t] != null){
+            if(enabledTransitions[t] && timedTransitions[t] != null && !timedTransitions[t].isWaiting()){
                 timedTransitions[t].setNewTimeStamp();
             }
         }
@@ -290,7 +279,7 @@ public class PetriNet {
 
     }
 
-    public Time[] getTimedTransitions(){return timedTransitions;}
+    public Time[] getTimedTransitions(){ return timedTransitions; }
 
     /* Se encarga de inicializar las matrices */
     private void setMatrices() {

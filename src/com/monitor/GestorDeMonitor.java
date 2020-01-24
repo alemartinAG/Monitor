@@ -4,7 +4,6 @@ import com.errors.IllegalPetriStateException;
 import com.errors.OutsideWindowException;
 import com.petri.PInvariant;
 import com.petri.PetriNet;
-import com.petri.Time;
 import com.util.Log;
 import com.util.Mutex;
 
@@ -96,37 +95,18 @@ public class GestorDeMonitor {
                     }
 
                     if (m) {
-                        // System.out.println("m>=0 // Despierto");
                         queues.wakeThread(policy.getNext(andVector));
                         return;
                     } else {
-                        // System.out.println("m<0 // k=false");
                         k = false;
                     }
 
-                } else {
+                }
+                else {
 
-                    Time timed = petriNet.getTimedTransitions()[transition];
+                    mutex.release();
+                    queues.sleepThread(transition);
 
-                    if(timed != null){
-                        if(timed.beforeWindow()){
-
-                            mutex.release();
-
-                            try {
-                                Thread.sleep(timed.getSleepTime());
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        else{
-                            k = false;
-                        }
-                    }
-                    else{
-                        mutex.release();
-                        queues.sleepThread(transition);
-                    }
                     // System.out.printf("THREAD %s WENT TO SLEEP\n",
                     // Thread.currentThread().getName());
                     // System.out.printf("[%s] Mutex released by Thread-%s and went to SLEEP\n",
@@ -135,28 +115,20 @@ public class GestorDeMonitor {
                 }
 
 
-            } catch (OutsideWindowException e) {
+            } catch (OutsideWindowException windowException) {
 
-                Time timed = petriNet.getTimedTransitions()[transition];
-
-                if(timed.beforeWindow()){
-
+                if(windowException.isBefore()){
                     mutex.release();
-
                     try {
-                        long milis = timed.getSleepTime();
-                        System.out.printf("Me duermo por la ventana unos %d milis\n", milis);
-                        Thread.sleep(milis);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
+                        Thread.sleep(windowException.timeToSleep());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
                 else {
                     k = false;
                 }
-
             }
-
 
         }
 

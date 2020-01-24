@@ -9,13 +9,12 @@ public class Time {
     private final static int RATIO = 1000;
 
     private int alpha, beta;
-    private boolean beforeWindow, waiting = false;
+    private boolean waiting = false;
     private Timestamp timeStamp;
 
     public Time(int alpha, int beta) {
         this.alpha = alpha * RATIO;
         this.beta = beta * RATIO;
-        //this.timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
     public boolean testTimeWindow() {
@@ -24,14 +23,7 @@ public class Time {
 
         if (now >= alpha && now <= beta) {
             return true;
-        } /*else {
-            // Compruebo si estoy antes de la ventana
-            if (now < alpha) {
-                beforeWindow = true;
-            } else {
-                beforeWindow = false;
-            }
-        }*/
+        }
 
         return false;
     }
@@ -40,37 +32,33 @@ public class Time {
         timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
-
-    public boolean beforeWindow() {
-        long now = System.currentTimeMillis() - timeStamp.getTime();
-
-        if (now < alpha) {
-            return true;
-        }
-
-        return false;
-
-
-        //return beforeWindow;
+    long getElapsedTime(){
+        return (System.currentTimeMillis() - timeStamp.getTime());
     }
 
-    public void setWaiting() {
+
+    public boolean beforeWindow() {
+        return this.getElapsedTime() < alpha;
+    }
+
+    void setWaiting() {
         waiting = true;
     }
 
-    public boolean isWaiting(){
+    boolean isWaiting(){
         return waiting;
     }
 
-    public long getSleepTime(){
-        long enabledTime = timeStamp.getTime();
-        long now = System.currentTimeMillis();
-        long sum = (enabledTime + alpha) - now;
-        return (sum);
+    void resetWaiting() {
+        waiting = false;
     }
 
-    public void resetWaiting() {
+    public long getSleepTime(){
 
+        long enabledTime = timeStamp.getTime();
+        long now = System.currentTimeMillis();
+
+        return (enabledTime + alpha) - now;
     }
 
     public int getAlpha(){return alpha/RATIO;}
