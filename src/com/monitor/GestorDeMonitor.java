@@ -51,7 +51,12 @@ public class GestorDeMonitor {
 
             try {
 
-                System.out.printf("Pruebo disparar la transicion %d!\n",transition);
+                if(checkTransitionsLeft()){
+                    mutex.release();
+                    return;
+                }
+
+                System.out.printf("Pruebo disparar la transicion %d!\n", transition+1);
 
                 result = petriNet.trigger(transition);
 
@@ -68,11 +73,11 @@ public class GestorDeMonitor {
 
                     /* Disparo la cantidad de transiciones especificadas */
                     transitionsLeft--;
-                    if (transitionsLeft < 0) {
-                        keeprunning = false;
+                    if(checkTransitionsLeft()){
                         mutex.release();
                         return;
                     }
+
 
                     System.out.printf("%3d | Transition %d triggered\n", transitionsTotal - transitionsLeft,
                             transition + 1);
@@ -136,6 +141,30 @@ public class GestorDeMonitor {
         // Timestamp(System.currentTimeMillis())),Thread.currentThread().getName());
         mutex.release();
 
+    }
+
+    private boolean checkTransitionsLeft(){
+
+        if (transitionsLeft <= 0) {
+            System.out.printf("Thread-%d termino, no hay mas transiciones\n", Thread.currentThread().getId());
+            keeprunning = false;
+
+            int index = 0;
+            for(boolean sleepingThread : queues.getQueued()){
+
+                if(sleepingThread){
+                    System.out.printf("Despierto al thread %d\n", index);
+                    queues.wakeThread(index);
+                    return true;
+                }
+
+                index++;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
 }

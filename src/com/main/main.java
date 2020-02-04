@@ -14,8 +14,8 @@ public class main {
 
     public static void main(String[] args) {
 
-        PetriNet pn = new PetriNet();
-        GestorDeMonitor monitor = new GestorDeMonitor(pn, 200);
+        PetriNet pn = new PetriNet(true);
+        GestorDeMonitor monitor = new GestorDeMonitor(pn, 10);
         ThreadDistribution threadDistr = new ThreadDistribution();
 
         pn.printMatrix(pn.getMatrix(PetriNet.CIM));
@@ -45,13 +45,13 @@ public class main {
             e.printStackTrace();
         }
 
-        /*TInvariant tinv = new TInvariant();
+        TInvariant tinv = new TInvariant();
 
         try {
             tinv.checkInvariants(pn.getInitialMarking());
         } catch (IllegalPetriStateException e) {
             e.printStackTrace();
-        }*/
+        }
 
     }
 

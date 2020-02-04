@@ -1,5 +1,6 @@
 package com.petri;
 
+import com.errors.DeadlockStateException;
 import com.errors.OutsideWindowException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,7 +30,7 @@ public class PetriNet {
     public static final int INITIAL = 0;
     public static final int CURRENT = 1;
 
-    private static final String PETRI = "res/petri-timed.html"; // matrices file's path
+    private static final String PETRI = "res/tiempotest.html"; // matrices file's path
     private static final String TIMED = "res/timed-transitions.txt";
 
     private int nPlaces = 0; // number of places in the petri net
@@ -45,7 +46,7 @@ public class PetriNet {
 
     private Time[] timedTransitions;
 
-    public PetriNet() {
+    public PetriNet(boolean timed) {
 
         // Parseo el archivo .html de las matrices de la red de petri generado por PIPE
         tableList = getTableList(PETRI);
@@ -59,10 +60,20 @@ public class PetriNet {
          */
         setMatrices();
 
-        checkMarking();
+        try {
+            checkMarking();
+        } catch (DeadlockStateException e) {
+            e.printStackTrace();
+        }
 
-        // Obtengo transiciones con tiempo
-        setTimedTransitions(TIMED);
+        // Arreglo de tiempos, con tamaño = Cant. de transiciones
+        timedTransitions = new Time[nTransitions];
+        Arrays.fill(timedTransitions, null);
+
+        if(timed){
+            // Obtengo transiciones con tiempo
+            setTimedTransitions(TIMED);
+        }
 
     }
 
@@ -80,12 +91,16 @@ public class PetriNet {
          */
         setMatrices();
 
+        // Arreglo de tiempos, con tamaño = Cant. de transiciones
+        timedTransitions = new Time[nTransitions];
+        Arrays.fill(timedTransitions, null);
+
         // Obtengo transiciones con tiempo
         setTimedTransitions(timed_file);
 
     }
 
-    private void checkMarking(){
+    private void checkMarking() throws DeadlockStateException {
 
         for (Integer tokens : currentMarking) {
             if (tokens > 0) {
@@ -93,10 +108,7 @@ public class PetriNet {
             }
         }
 
-        //TODO: tirar warning e interrumpit ejecucion; o chequear deadlock directamente
-        System.out.println("The net does not have any token in it's initial marking");
-
-
+        throw new DeadlockStateException("The net does not have any token in it's initial marking");
     }
 
     /* Se encarga de disparar una transicion y actualizar el marcado de la red */
@@ -234,9 +246,7 @@ public class PetriNet {
     }
 
     private boolean isEnabled(int transition) {
-
         return areEnabled()[transition];
-
     }
 
     /* Se encarga de calcular qué transiciones se encuentran sensibilizadas */
@@ -248,11 +258,19 @@ public class PetriNet {
 
         for (int t = 0; t < nTransitions; t++) {
             for (int p = 0; p < nPlaces; p++) {
+
+                // Chequeo si las plazas tienen los tokens suficientes
                 if (backwardMatrix[p][t] > this.currentMarking[p]) {
                     enabledTransitions[t] = false;
                     break;
                 }
-                // TODO: ver matriz de inhibición
+
+                // Chequeo si hay un arco inhibidor
+                if(inhibitionMatrix[p][t] > 0 && this.currentMarking[p] > 0){
+                    enabledTransitions[t] = false;
+                    break;
+                }
+
             }
             if(enabledTransitions[t] && timedTransitions[t] != null && !timedTransitions[t].isWaiting()){
                 timedTransitions[t].setNewTimeStamp();
@@ -265,14 +283,10 @@ public class PetriNet {
 
     private void setTimedTransitions(String file) {
 
-        // Arreglo de tiempos, con tamaño = Cant. de transiciones
-        timedTransitions = new Time[nTransitions];
-        Arrays.fill(timedTransitions, null);
-
         // Creo lista de arreglos con N° de transición->[0], Alpha->[1], Beta->[2]
         ArrayList<ArrayList<Integer>> timed = new Parser(file, "\\d+", "(", ")").getParsedElements();
 
-        // Agrego las transiciones con tiempo al arreglo
+        // Agrego las transiciones con tiempo al arreglo, si el archivo está vacío no se agrega ninguna
         for (ArrayList<Integer> transition : timed) {
             timedTransitions[transition.get(0)-1] = new Time(transition.get(1), transition.get(2));
         }
@@ -280,6 +294,7 @@ public class PetriNet {
     }
 
     public Time[] getTimedTransitions(){ return timedTransitions; }
+
 
     /* Se encarga de inicializar las matrices */
     private void setMatrices() {

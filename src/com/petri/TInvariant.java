@@ -1,6 +1,7 @@
 package com.petri;
 
 import com.errors.IllegalPetriStateException;
+import com.errors.OutsideWindowException;
 import com.util.Parser;
 
 import java.io.IOException;
@@ -62,15 +63,20 @@ public class TInvariant extends Invariant {
         Pattern pattern = Pattern.compile("(T\\d+)");
         Matcher matcher = pattern.matcher(data);
 
-        PetriNet petriTest = new PetriNet();
+        PetriNet petriTest = new PetriNet(false);
 
         while (matcher.find()) {
             int partial = Integer.parseInt(matcher.group().replaceAll("T", ""));
-            //petriTest.trigger(partial-1);
+
+            try {
+                petriTest.trigger(partial-1);
+            } catch (OutsideWindowException e) {
+                e.printStackTrace();
+            }
         }
 
-//        System.out.println(Arrays.toString(petriTest.getCurrentMarking()));
-//        System.out.println(Arrays.toString(stateList.get(stateList.size()-1).toArray()));
+        System.out.println(Arrays.toString(petriTest.getCurrentMarking()));
+        System.out.println(Arrays.toString(stateList.get(stateList.size()-1).toArray()));
 
         //TODO: ANDA DE VEZ EN CUANDO, VER COMO ES REALMENTE
         if(Arrays.equals(stateList.get(stateList.size()-1).toArray(), petriTest.getCurrentMarking())){
