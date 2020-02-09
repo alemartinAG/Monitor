@@ -17,16 +17,13 @@ public class TInvariant extends Invariant {
     private final static String LOGPATH = "res/log.txt";
     private final static String INVPATH = "res/t-invariantes.txt";
 
-    private ArrayList<ArrayList<Integer>> stateList;
-
     public TInvariant(){
         parseInvariants(INVPATH);
-        stateList = parseLogStates();
+
     }
 
     public TInvariant(String file){
         parseInvariants(file);
-        stateList = parseLogStates();
     }
 
 
@@ -36,7 +33,6 @@ public class TInvariant extends Invariant {
     @Override
     public boolean checkInvariants(Integer[] initialState) throws IllegalPetriStateException {
 
-        ArrayList<Integer> transitionsLog = new ArrayList<>();
         Pattern[] patterns = new Pattern[invariantList.size()];
         ArrayList<String> replacers = new ArrayList<>();
         ArrayList<Matcher> matchers = new ArrayList<>();
@@ -101,44 +97,42 @@ public class TInvariant extends Invariant {
 
         }
 
-        //TODO: VER RESTANTES
+        for(ArrayList<Integer> invariant : invariantList){
+
+            for(int j=0; j<invariant.size()-1; j++){
+
+                String invariantPattern = "";
+                String replace = "";
+
+                for(int i=0; i<invariant.size()-2-j; i++) {
+                    invariantPattern += String.format("(T%d)([\\S\\s]+?)", invariant.get(i));
+                    replace += String.format("$%d", i*2+2);
+                }
+
+                invariantPattern += String.format("(T%d)", invariant.get(invariant.size()-2-j));
+
+                Pattern pattern = Pattern.compile(invariantPattern);
+                Matcher matcher = pattern.matcher(data);
+
+
+                while (matcher.find()){
+                    data = matcher.replaceFirst(replace);
+                    matcher.reset(data);
+                }
 
 
 
-
-
-        /*Pattern pattern = Pattern.compile("(T\\d+)");
-        Matcher matcher = pattern.matcher(data);
-
-        while (matcher.find()) {
-            transitionsLog.add(Integer.parseInt(matcher.group().replaceAll("T", "")));
-            System.out.printf("Linea: %d\n", matcher.end());
-        }*/
-
-        /*for(ArrayList<Integer> invariant : invariantList){
-
-            String pattern = "";
-            String replace = "";
-
-            for(int i=0; i<invariant.size()-1; i++) {
-                pattern += String.format("(T%d)([\\S\\s]+?)", invariant.get(i));
-                replace += String.format("$%d", i*2+2);
             }
 
-            pattern += String.format("(T%d)", invariant.get(invariant.size()-1));
+        }
 
-            data = data.replaceAll(pattern, replace);
+        Pattern pattern = Pattern.compile("T\\d+");
+        Matcher matcher = pattern.matcher(data);
 
-        }*/
-
-
-
+        if(matcher.find()){
+            throw new IllegalPetriStateException("T-Invariants are not met\n"+data);
+        }
 
         return true;
-    }
-
-    /* Se encarga de parsear los estados del log */
-    private ArrayList<ArrayList<Integer>> parseLogStates(){
-        return new Parser(LOGPATH, "\\d+", "[", "]").getParsedElements();
     }
 }
