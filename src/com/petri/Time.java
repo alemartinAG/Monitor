@@ -9,6 +9,7 @@ public class Time {
     private final static int RATIO = 1000;
 
     private int alpha, beta;
+    private long elapsedTime;
     private boolean waiting = false;
     private Timestamp timeStamp;
 
@@ -32,13 +33,15 @@ public class Time {
         timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
-    long getElapsedTime(){
-        return (System.currentTimeMillis() - timeStamp.getTime());
+    void setElapsedTime(){
+        elapsedTime = System.currentTimeMillis() - timeStamp.getTime();
     }
+
+    public long getElapsedTime(){return elapsedTime;}
 
 
     public boolean beforeWindow() {
-        return this.getElapsedTime() < alpha;
+        return (System.currentTimeMillis() - timeStamp.getTime()) < alpha;
     }
 
     void setWaiting() {

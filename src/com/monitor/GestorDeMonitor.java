@@ -44,8 +44,6 @@ public class GestorDeMonitor {
         boolean result = true;
 
         mutex.acquire();
-        // System.out.printf("Acquired by Thread-%s\n",
-        // Thread.currentThread().getName());
 
         while (k) {
 
@@ -55,8 +53,6 @@ public class GestorDeMonitor {
                     mutex.release();
                     return;
                 }
-
-                System.out.printf("Pruebo disparar la transicion %d!\n", transition+1);
 
                 result = petriNet.trigger(transition);
 
@@ -82,7 +78,15 @@ public class GestorDeMonitor {
                     System.out.printf("%3d | Transition %d triggered\n", transitionsTotal - transitionsLeft,
                             transition + 1);
                     String currentMarking = Arrays.toString(petriNet.getMatrix(PetriNet.MRK)[PetriNet.CURRENT]);
-                    eventLog.log(String.format("T%d%sMarking: %s", transition + 1, Log.SEPARATOR, currentMarking));
+
+                    if(petriNet.getTimedTransitions()[transition] != null){
+                        long time = petriNet.getTimedTransitions()[transition].getElapsedTime();
+                        eventLog.log(String.format("T%d%sMarking: %s%sTime: %d[ms]", transition + 1, Log.SEPARATOR, currentMarking, Log.SEPARATOR, time));
+                    }
+                    else{
+                        eventLog.log(String.format("T%d%sMarking: %s", transition + 1, Log.SEPARATOR, currentMarking));
+                    }
+
 
                     boolean[] enabledVector = petriNet.areEnabled().clone();
                     boolean[] queueVector = queues.getQueued().clone();
@@ -145,15 +149,17 @@ public class GestorDeMonitor {
 
     private boolean checkTransitionsLeft(){
 
-        if (transitionsLeft <= 0) {
-            System.out.printf("Thread-%d termino, no hay mas transiciones\n", Thread.currentThread().getId());
+        if (transitionsLeft < 0) {
+
+            //System.out.printf("Thread-%d termino, no hay mas transiciones\n", Thread.currentThread().getId());
+
             keeprunning = false;
 
             int index = 0;
             for(boolean sleepingThread : queues.getQueued()){
 
                 if(sleepingThread){
-                    System.out.printf("Despierto al thread %d\n", index);
+                    //System.out.printf("Despierto al thread %d\n", index);
                     queues.wakeThread(index);
                     return true;
                 }

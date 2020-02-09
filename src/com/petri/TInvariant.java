@@ -36,6 +36,11 @@ public class TInvariant extends Invariant {
     @Override
     public boolean checkInvariants(Integer[] initialState) throws IllegalPetriStateException {
 
+        ArrayList<Integer> transitionsLog = new ArrayList<>();
+        Pattern[] patterns = new Pattern[invariantList.size()];
+        ArrayList<String> replacers = new ArrayList<>();
+        ArrayList<Matcher> matchers = new ArrayList<>();
+
         String data = "";
 
         try {
@@ -44,7 +49,73 @@ public class TInvariant extends Invariant {
             e.printStackTrace();
         }
 
+        int index = 0;
+
         for(ArrayList<Integer> invariant : invariantList){
+
+            String invariantPattern = "";
+            String replace = "";
+
+            for(int i=0; i<invariant.size()-1; i++) {
+                invariantPattern += String.format("(T%d)([\\S\\s]+?)", invariant.get(i));
+                replace += String.format("$%d", i*2+2);
+            }
+
+            invariantPattern += String.format("(T%d)", invariant.get(invariant.size()-1));
+
+            patterns[index] = Pattern.compile(invariantPattern);
+            matchers.add(patterns[index].matcher(data));
+            replacers.add(replace);
+
+            index++;
+        }
+
+        while (matchers.size() > 0){
+
+            int position = data.length();
+            int invariant = -1;
+
+            for(int i=0; i<matchers.size(); i++){
+
+                if(!matchers.get(i).find()){
+                    matchers.remove(i);
+                    replacers.remove(i);
+                }
+                else{
+
+                    if(matchers.get(i).end() < position){
+                        position = matchers.get(i).end();
+                        invariant = i;
+                    }
+
+                }
+            }
+
+            if(invariant >= 0){
+                data = matchers.get(invariant).replaceFirst(replacers.get(invariant));
+            }
+
+            for (Matcher matcher : matchers) {
+                matcher.reset(data);
+            }
+
+        }
+
+        //TODO: VER RESTANTES
+
+
+
+
+
+        /*Pattern pattern = Pattern.compile("(T\\d+)");
+        Matcher matcher = pattern.matcher(data);
+
+        while (matcher.find()) {
+            transitionsLog.add(Integer.parseInt(matcher.group().replaceAll("T", "")));
+            System.out.printf("Linea: %d\n", matcher.end());
+        }*/
+
+        /*for(ArrayList<Integer> invariant : invariantList){
 
             String pattern = "";
             String replace = "";
@@ -58,33 +129,12 @@ public class TInvariant extends Invariant {
 
             data = data.replaceAll(pattern, replace);
 
-        }
+        }*/
 
-        Pattern pattern = Pattern.compile("(T\\d+)");
-        Matcher matcher = pattern.matcher(data);
 
-        PetriNet petriTest = new PetriNet(false);
 
-        while (matcher.find()) {
-            int partial = Integer.parseInt(matcher.group().replaceAll("T", ""));
 
-            try {
-                petriTest.trigger(partial-1);
-            } catch (OutsideWindowException e) {
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println(Arrays.toString(petriTest.getCurrentMarking()));
-        System.out.println(Arrays.toString(stateList.get(stateList.size()-1).toArray()));
-
-        //TODO: ANDA DE VEZ EN CUANDO, VER COMO ES REALMENTE
-        if(Arrays.equals(stateList.get(stateList.size()-1).toArray(), petriTest.getCurrentMarking())){
-            return true;
-        }
-        else {
-            throw new IllegalPetriStateException("T-Invariants are not met");
-        }
+        return true;
     }
 
     /* Se encarga de parsear los estados del log */

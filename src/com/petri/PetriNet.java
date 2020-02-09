@@ -30,7 +30,7 @@ public class PetriNet {
     public static final int INITIAL = 0;
     public static final int CURRENT = 1;
 
-    private static final String PETRI = "res/tiempotest.html"; // matrices file's path
+    private static final String PETRI = "res/petri.html"; // matrices file's path
     private static final String TIMED = "res/timed-transitions.txt";
 
     private int nPlaces = 0; // number of places in the petri net
@@ -132,7 +132,8 @@ public class PetriNet {
             }
 
             timed.resetWaiting();
-            System.out.printf("Tiempo de espera de T%d: %d [ms]\n", transition, timed.getElapsedTime());
+            timed.setElapsedTime();
+            //System.out.printf("Tiempo de espera de T%d: %d [ms]\n", transition+1, timed.getElapsedTime());
 
         }
 
@@ -266,7 +267,7 @@ public class PetriNet {
                 }
 
                 // Chequeo si hay un arco inhibidor
-                if(inhibitionMatrix[p][t] > 0 && this.currentMarking[p] > 0){
+                if(inhibitionMatrix[p][t] > 0 && inhibitionMatrix[p][t] <=  this.currentMarking[p]){
                     enabledTransitions[t] = false;
                     break;
                 }
