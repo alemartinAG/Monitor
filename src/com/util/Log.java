@@ -8,15 +8,12 @@ import java.sql.Timestamp;
 public class Log {
 
     public static final String SEPARATOR = " // ";
-
     private final String OUT = "res/log.txt";
-
-    private FileWriter fileReader = null;
 
     public Log(){
 
         try {
-            fileReader = new FileWriter(OUT);
+            new FileWriter(OUT);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -24,26 +21,34 @@ public class Log {
     }
 
     public void log(String event){
+
+        FileWriter fileWriter;
         
         try {
-            fileReader = new FileWriter(OUT, true);
+            fileWriter = new FileWriter(OUT, true);
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
 
         String stamp = new Timestamp(System.currentTimeMillis()).toString();
         event =  String.format("%-23s%s%s", stamp, SEPARATOR, event);
 
-        BufferedWriter bufferedWriter = new BufferedWriter(fileReader);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
         try {
             bufferedWriter.write(event);
             bufferedWriter.newLine();
             bufferedWriter.flush();
             bufferedWriter.close();
+
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
     }
 
 }

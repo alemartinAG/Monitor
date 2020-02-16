@@ -267,12 +267,14 @@ public class PetriNet {
                 }
 
                 // Chequeo si hay un arco inhibidor
-                if(inhibitionMatrix[p][t] > 0 && inhibitionMatrix[p][t] <=  this.currentMarking[p]){
-                    enabledTransitions[t] = false;
-                    break;
+                if(inhibitionMatrix[p][t] > 0){
+                    if(this.currentMarking[p] >= inhibitionMatrix[p][t]){
+                        enabledTransitions[t] = false;
+                        break;
+                    }
                 }
-
             }
+
             if(enabledTransitions[t] && timedTransitions[t] != null && !timedTransitions[t].isWaiting()){
                 timedTransitions[t].setNewTimeStamp();
             }

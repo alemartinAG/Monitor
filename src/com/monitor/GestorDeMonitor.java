@@ -7,6 +7,7 @@ import com.petri.PetriNet;
 import com.util.Log;
 import com.util.Mutex;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 
 public class GestorDeMonitor {
@@ -81,15 +82,22 @@ public class GestorDeMonitor {
 
                     if(petriNet.getTimedTransitions()[transition] != null){
                         long time = petriNet.getTimedTransitions()[transition].getElapsedTime();
-                        eventLog.log(String.format("T%d%sMarking: %s%sTime: %d[ms]", transition + 1, Log.SEPARATOR, currentMarking, Log.SEPARATOR, time));
+                        eventLog.log(String.format("T%-2d%sMarking: %s%sTime: %4d[ms]", transition + 1, Log.SEPARATOR, currentMarking, Log.SEPARATOR, time));
                     }
                     else{
-                        eventLog.log(String.format("T%d%sMarking: %s", transition + 1, Log.SEPARATOR, currentMarking));
+                        eventLog.log(String.format("T%-2d%sMarking: %s", transition + 1, Log.SEPARATOR, currentMarking));
                     }
 
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                     boolean[] enabledVector = petriNet.areEnabled().clone();
+                    //System.out.println("EV: " + Arrays.toString(enabledVector));
                     boolean[] queueVector = queues.getQueued().clone();
+                    //System.out.println("QV: " + Arrays.toString(queueVector));
                     boolean[] andVector = new boolean[petriNet.getTransitionsCount()];
                     Arrays.fill(andVector, false);
 
@@ -97,15 +105,20 @@ public class GestorDeMonitor {
 
                     /* Calculo del vector AND */
                     for (int i = 0; i < petriNet.getTransitionsCount(); i++) {
+                        //andVector[i] = queueVector[i] && enabledVector[i];
                         if (queueVector[i] && enabledVector[i]) {
                             andVector[i] = true;
                             m = true;
                         }
                     }
 
+                    System.out.println("AV: "+Arrays.toString(andVector));
+
                     if (m) {
+
                         queues.wakeThread(policy.getNext(andVector));
                         return;
+
                     } else {
                         k = false;
                     }
@@ -127,7 +140,8 @@ public class GestorDeMonitor {
             } catch (OutsideWindowException windowException) {
 
                 if(windowException.isBefore()){
-                    mutex.release();
+
+                    //TODO: simplemente duerme?
                     try {
                         Thread.sleep(windowException.timeToSleep());
                     } catch (InterruptedException e) {

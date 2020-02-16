@@ -15,10 +15,13 @@ public class main {
     public static void main(String[] args) {
 
         PetriNet pn = new PetriNet(true);
-        GestorDeMonitor monitor = new GestorDeMonitor(pn, 100);
+        GestorDeMonitor monitor = new GestorDeMonitor(pn, 500);
         ThreadDistribution threadDistr = new ThreadDistribution();
 
+        System.out.println("Combined Incidence Matrix");
         pn.printMatrix(pn.getMatrix(PetriNet.CIM));
+        System.out.println("Inhibition Matrix");
+        pn.printMatrix(pn.getMatrix(PetriNet.INM));
 
         threadDistr.printThreads();
 
