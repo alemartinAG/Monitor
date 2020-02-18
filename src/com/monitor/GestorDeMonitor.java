@@ -12,6 +12,8 @@ import java.util.Arrays;
 
 public class GestorDeMonitor {
 
+    private static final long NOWAIT = 0;
+
     private Mutex mutex;
     private PetriNet petriNet;
     private Colas queues;
@@ -37,12 +39,13 @@ public class GestorDeMonitor {
         transitionsLeft = limit;
         transitionsTotal = limit;
         pInvariant = new PInvariant(petriNet.getInitialMarking());
+
     }
 
-    public void fireTransition(int transition) {
+    public long fireTransition(int transition) {
 
         boolean k = true;
-        boolean result = true;
+        boolean result;
 
         mutex.acquire();
 
@@ -52,7 +55,7 @@ public class GestorDeMonitor {
 
                 if(checkTransitionsLeft()){
                     mutex.release();
-                    return;
+                    return NOWAIT;
                 }
 
                 result = petriNet.trigger(transition);
@@ -65,14 +68,14 @@ public class GestorDeMonitor {
                     } catch (IllegalPetriStateException e) {
                         keeprunning = false;
                         e.printStackTrace();
-                        return;
+                        return NOWAIT;
                     }
 
                     /* Disparo la cantidad de transiciones especificadas */
                     transitionsLeft--;
                     if(checkTransitionsLeft()){
                         mutex.release();
-                        return;
+                        return NOWAIT;
                     }
 
 
@@ -88,12 +91,6 @@ public class GestorDeMonitor {
                         eventLog.log(String.format("T%-2d%sMarking: %s", transition + 1, Log.SEPARATOR, currentMarking));
                     }
 
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
                     boolean[] enabledVector = petriNet.areEnabled().clone();
                     //System.out.println("EV: " + Arrays.toString(enabledVector));
                     boolean[] queueVector = queues.getQueued().clone();
@@ -105,19 +102,18 @@ public class GestorDeMonitor {
 
                     /* Calculo del vector AND */
                     for (int i = 0; i < petriNet.getTransitionsCount(); i++) {
-                        //andVector[i] = queueVector[i] && enabledVector[i];
                         if (queueVector[i] && enabledVector[i]) {
                             andVector[i] = true;
                             m = true;
                         }
                     }
 
-                    System.out.println("AV: "+Arrays.toString(andVector));
+                    //System.out.println("AV: "+Arrays.toString(andVector));
 
                     if (m) {
 
                         queues.wakeThread(policy.getNext(andVector));
-                        return;
+                        return NOWAIT;
 
                     } else {
                         k = false;
@@ -129,11 +125,6 @@ public class GestorDeMonitor {
                     mutex.release();
                     queues.sleepThread(transition);
 
-                    // System.out.printf("THREAD %s WENT TO SLEEP\n",
-                    // Thread.currentThread().getName());
-                    // System.out.printf("[%s] Mutex released by Thread-%s and went to SLEEP\n",
-                    // (new
-                    // Timestamp(System.currentTimeMillis())),Thread.currentThread().getName());
                 }
 
 
@@ -141,12 +132,15 @@ public class GestorDeMonitor {
 
                 if(windowException.isBefore()){
 
-                    //TODO: simplemente duerme?
+                    mutex.release();
+                    return windowException.timeToSleep();
+
+                    /*//TODO: simplemente duerme?
                     try {
                         Thread.sleep(windowException.timeToSleep());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                 }
                 else {
                     k = false;
@@ -155,9 +149,8 @@ public class GestorDeMonitor {
 
         }
 
-        // System.out.printf("[%s] Mutex released by Thread-%s\n", (new
-        // Timestamp(System.currentTimeMillis())),Thread.currentThread().getName());
         mutex.release();
+        return NOWAIT;
 
     }
 
@@ -165,15 +158,12 @@ public class GestorDeMonitor {
 
         if (transitionsLeft < 0) {
 
-            //System.out.printf("Thread-%d termino, no hay mas transiciones\n", Thread.currentThread().getId());
-
             keeprunning = false;
 
             int index = 0;
             for(boolean sleepingThread : queues.getQueued()){
 
                 if(sleepingThread){
-                    //System.out.printf("Despierto al thread %d\n", index);
                     queues.wakeThread(index);
                     return true;
                 }

@@ -39,6 +39,9 @@ public class TransitionThread implements Runnable {
         // Seteo el nombre del thread de acuerdo al orden de creacion
         Thread.currentThread().setName(String.format("%d", thread_number));
 
+        int transition;
+        long sleepTime;
+
         while(GestorDeMonitor.keeprunning){
 
             /* El hilo trata de disparar sus transiciones, una por una */
@@ -46,12 +49,29 @@ public class TransitionThread implements Runnable {
 
                 /* Para no acaparar el semáforo */
                 /*try {
-                    Thread.sleep(new Random().nextInt(1)+1);
+                    Thread.sleep(new Random().nextInt(50));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }*/
 
-                monitor.fireTransition(thread_transitions.get(i)-1);
+                transition = thread_transitions.get(i)-1;
+
+                sleepTime = monitor.fireTransition(transition);
+
+                if(sleepTime > 0){
+
+                    System.out.printf("@@@@ T%d is going to sleep %d [ms]\n", transition+1, sleepTime);
+
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    monitor.fireTransition(transition);
+                }
+
+
             }
         }
 
