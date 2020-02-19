@@ -132,10 +132,11 @@ public class PetriNet {
                 throw new OutsideWindowException(timed.beforeWindow(), timed.getSleepTime());
             }
 
-            System.out.printf("!!!!! Tiempo de espera de T%d: %d [ms]\n", transition+1, timed.getElapsedTime());
-
             //timed.resetWaiting();
             timed.setElapsedTime();
+
+            // Si luego de dispararse sigue sensibilizada igual debo actualizar el ts
+            timed.setNewTimeStamp();
 
 
         }

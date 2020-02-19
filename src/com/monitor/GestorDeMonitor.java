@@ -66,8 +66,9 @@ public class GestorDeMonitor {
                     try {
                         pInvariant.checkInvariants(petriNet.getCurrentMarking());
                     } catch (IllegalPetriStateException e) {
-                        keeprunning = false;
+                        transitionsLeft = -1;
                         e.printStackTrace();
+                        mutex.release();
                         return NOWAIT;
                     }
 
@@ -130,6 +131,7 @@ public class GestorDeMonitor {
 
                 }
                 else {
+                    System.out.printf("::::::: T%02d SE PERDIO SU VENTANA ::::::::\n", transition+1);
                     k = false;
                 }
             }

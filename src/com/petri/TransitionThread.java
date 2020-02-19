@@ -49,7 +49,7 @@ public class TransitionThread implements Runnable {
 
                 /* Para no acaparar el semáforo */
                 /*try {
-                    Thread.sleep(new Random().nextInt(50));
+                    Thread.sleep(new Random().nextInt(10));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }*/
@@ -65,7 +65,7 @@ public class TransitionThread implements Runnable {
                  */
                 if(sleepTime > 0){
 
-                    System.out.printf("@@@@ T%d is going to sleep %d [ms]\n", transition+1, sleepTime);
+                    //System.out.printf("@@@@ T%d is going to sleep %d [ms]\n", transition+1, sleepTime);
 
                     try {
                         Thread.sleep(sleepTime);

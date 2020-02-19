@@ -19,11 +19,11 @@ public class FairPolicy implements Politicas {
 
         System.out.print("****");
         for(Integer tran : truev){
-            System.out.printf("%2d ", tran);
+            System.out.printf(" %2d ", tran+1);
         }
         System.out.println("****");
 
-        if(andVector[10]){
+        /*if(andVector[10]){
             return 10;
         }
 
@@ -45,9 +45,6 @@ public class FairPolicy implements Politicas {
             return 11;
         }
 
-        /*if(andVector[12])
-            return 12;*/
-
         if(andVector[18] && andVector[21]){
             if(new Random().nextInt(1) > 0.5){
                 return 18;
@@ -55,7 +52,7 @@ public class FairPolicy implements Politicas {
             else{
                 return 21;
             }
-        }
+        }*/
 
         /*if(andVector[19])
             return 19;
