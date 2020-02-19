@@ -91,20 +91,13 @@ public class GestorDeMonitor {
                         eventLog.log(String.format("T%-2d%sMarking: %s", transition + 1, Log.SEPARATOR, currentMarking));
                     }
 
-                    boolean[] enabledVector = petriNet.areEnabled().clone();
-                    //System.out.println("EV: " + Arrays.toString(enabledVector));
-                    boolean[] queueVector = queues.getQueued().clone();
-                    //System.out.println("QV: " + Arrays.toString(queueVector));
-                    boolean[] andVector = new boolean[petriNet.getTransitionsCount()];
-                    Arrays.fill(andVector, false);
-
                     boolean m = false;
+                    boolean[] andVector = getAndVector();
 
-                    /* Calculo del vector AND */
-                    for (int i = 0; i < petriNet.getTransitionsCount(); i++) {
-                        if (queueVector[i] && enabledVector[i]) {
-                            andVector[i] = true;
+                    for(boolean t : andVector){
+                        if (t) {
                             m = true;
+                            break;
                         }
                     }
 
@@ -135,12 +128,6 @@ public class GestorDeMonitor {
                     mutex.release();
                     return windowException.timeToSleep();
 
-                    /*//TODO: simplemente duerme?
-                    try {
-                        Thread.sleep(windowException.timeToSleep());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }*/
                 }
                 else {
                     k = false;
@@ -154,6 +141,26 @@ public class GestorDeMonitor {
 
     }
 
+    private boolean[] getAndVector(){
+
+        boolean[] enabledVector = petriNet.areEnabled().clone();
+        //System.out.println("EV: " + Arrays.toString(enabledVector));
+        boolean[] queueVector = queues.getQueued().clone();
+        //System.out.println("QV: " + Arrays.toString(queueVector));
+        boolean[] andVector = new boolean[petriNet.getTransitionsCount()];
+        Arrays.fill(andVector, false);
+
+        /* Calculo del vector AND */
+        for (int i = 0; i < petriNet.getTransitionsCount(); i++) {
+            if (queueVector[i] && enabledVector[i]) {
+                andVector[i] = true;
+            }
+        }
+
+        return andVector;
+    }
+
+    /* Se encarga de comprobar que queden transiciones por disparar */
     private boolean checkTransitionsLeft(){
 
         if (transitionsLeft < 0) {

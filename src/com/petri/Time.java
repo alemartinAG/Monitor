@@ -10,7 +10,6 @@ public class Time {
 
     private int alpha, beta;
     private long elapsedTime;
-    private boolean waiting = false;
     private Timestamp timeStamp;
 
     public Time(int alpha, int beta) {
@@ -39,22 +38,25 @@ public class Time {
 
     public long getElapsedTime(){return elapsedTime;}
 
-
-    public boolean beforeWindow() {
+    boolean beforeWindow() {
         return (System.currentTimeMillis() - timeStamp.getTime()) < alpha;
     }
+
+    // TODO: para que me sirven???
+    /*
+    private boolean waiting = false;
 
     void setWaiting() {
         waiting = true;
     }
 
-    boolean isWaiting(){
-        return waiting;
-    }
-
     void resetWaiting() {
         waiting = false;
     }
+
+    boolean isWaiting(){
+        return waiting;
+    }*/
 
     public long getSleepTime(){
 
@@ -63,7 +65,6 @@ public class Time {
 
         return (enabledTime + alpha) - now;
     }
-
     public int getAlpha(){return alpha/RATIO;}
     public int getBeta(){return beta/RATIO;}
     public Timestamp getTimestamp(){return timeStamp;}

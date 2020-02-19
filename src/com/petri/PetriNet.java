@@ -45,6 +45,7 @@ public class PetriNet {
     private Integer[] currentMarking;
 
     private Time[] timedTransitions;
+    private boolean[] previouslyEnabled;
 
     public PetriNet(boolean timed) {
 
@@ -60,6 +61,7 @@ public class PetriNet {
          */
         setMatrices();
 
+        // Chequeo que la red tenga tokens
         try {
             checkMarking();
         } catch (DeadlockStateException e) {
@@ -69,6 +71,9 @@ public class PetriNet {
         // Arreglo de tiempos, con tamaño = Cant. de transiciones
         timedTransitions = new Time[nTransitions];
         Arrays.fill(timedTransitions, null);
+
+        previouslyEnabled = new boolean[nTransitions];
+        Arrays.fill(previouslyEnabled, false);
 
         if(timed){
             // Obtengo transiciones con tiempo
@@ -95,21 +100,17 @@ public class PetriNet {
         timedTransitions = new Time[nTransitions];
         Arrays.fill(timedTransitions, null);
 
+        previouslyEnabled = new boolean[nTransitions];
+        Arrays.fill(previouslyEnabled, false);
+
         // Obtengo transiciones con tiempo
         setTimedTransitions(timed_file);
 
     }
 
-    private void checkMarking() throws DeadlockStateException {
-
-        for (Integer tokens : currentMarking) {
-            if (tokens > 0) {
-                return;
-            }
-        }
-
-        throw new DeadlockStateException("The net does not have any token in it's initial marking");
-    }
+    /**
+     *  Evolucion de la red
+     */
 
     /* Se encarga de disparar una transicion y actualizar el marcado de la red */
     public boolean trigger(int transition) throws OutsideWindowException {
@@ -127,13 +128,13 @@ public class PetriNet {
 
             if(!timed.testTimeWindow()){
                 //No esta dentro de la ventana
-                timed.setWaiting();
+                //timed.setWaiting();
                 throw new OutsideWindowException(timed.beforeWindow(), timed.getSleepTime());
             }
 
             System.out.printf("!!!!! Tiempo de espera de T%d: %d [ms]\n", transition+1, timed.getElapsedTime());
 
-            timed.resetWaiting();
+            //timed.resetWaiting();
             timed.setElapsedTime();
 
 
@@ -161,95 +162,10 @@ public class PetriNet {
         return true;
     }
 
-    /* Debugging, imprime la sensibilizacion de las transiciones */
-    protected void printEnabled() {
-        System.out.print("Enabled Transitions: ");
-        boolean[] enabledTransitions = areEnabled();
-        for (int i = 0; i < enabledTransitions.length; i++) {
-            System.out.printf(" | T%d: %s | ", i + 1, enabledTransitions[i]);
-        }
-        System.out.print("\n\n");
-    }
-
-    /* Debugging, impime el marcado actual */
-    protected void printCurrentMarking() {
-        System.out.println("Current Marking");
-        printMatrix(currentMarking);
-    }
-
-    /* Devuelve el marcado inicial de la red */
-    public Integer[] getInitialMarking() {
-        return initialMarking;
-    }
-
-    /* Devuelve el marcado actual de la red */
-    public Integer[] getCurrentMarking() {
-        return currentMarking;
-    }
-
-    /* Devuelve la matriz especificada */
-    public Integer[][] getMatrix(int index) {
-
-        Integer[][] def = { { 0 }, { 0 } };
-        Integer[][] marking = { initialMarking.clone(), currentMarking.clone() };
-
-        switch (index) {
-        case FIM:
-            return forwardMatrix;
-        case BIM:
-            return backwardMatrix;
-        case CIM:
-            return combinedIMatrix;
-        case INM:
-            return inhibitionMatrix;
-        case MRK:
-            return marking;
-        default:
-            return def;
-        }
-    }
-
-    /* Devuelve el numero de plazas de la red */
-    public int getPlacesCount() {
-        return nPlaces;
-    }
-
-    /* Devuelve el numero de transiciones de la red */
-    public int getTransitionsCount() {
-        return nTransitions;
-    }
-
-    /* Método para imprimir matrices, utilizado en el debugging */
-    public void printMatrix(Object[][] matrix) {
-
-        System.out.print("\n");
-
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                System.out.printf("%3s ", matrix[i][j].toString());
-            }
-            System.out.println("");
-        }
-
-        System.out.print("\n");
-
-    }
-
-    /* Método para imprimir matrices, utilizado en el debugging */
-    public void printMatrix(Object[] matrix) {
-
-        System.out.print("\n");
-
-        for (int i = 0; i < matrix.length; i++) {
-            System.out.printf("%3s ", matrix[i].toString());
-        }
-
-        System.out.print("\n\n");
-
-    }
-
+    /* Se encarga de comprobar que la transicion especificada se encuentre sensibilizada */
     private boolean isEnabled(int transition) {
-        return areEnabled()[transition];
+        previouslyEnabled = areEnabled();
+        return previouslyEnabled[transition];
     }
 
     /* Se encarga de calcular qué transiciones se encuentran sensibilizadas */
@@ -277,15 +193,28 @@ public class PetriNet {
                 }
             }
 
-            if(enabledTransitions[t] && timedTransitions[t] != null && !timedTransitions[t].isWaiting()){
+
+            // Chequeo si una transicion con tiempo paso a estar habilitada y actualizo su ts
+            //TODO: Si se pasa del intervalo muere???
+            if(enabledTransitions[t] && timedTransitions[t] != null && !previouslyEnabled[t]){
                 timedTransitions[t].setNewTimeStamp();
             }
+
+            /*if(enabledTransitions[t] && timedTransitions[t] != null && !timedTransitions[t].isWaiting()){
+                timedTransitions[t].setNewTimeStamp();
+                //timedTransitions[t].setWaiting();
+            }*/
         }
 
         return enabledTransitions;
 
     }
 
+    /**
+     *  Transiciones y plazas
+     */
+
+    /* Parsea los tiempos de las transiciones y genera los tiempos*/
     private void setTimedTransitions(String file) {
 
         // Creo lista de arreglos con N° de transición->[0], Alpha->[1], Beta->[2]
@@ -298,8 +227,70 @@ public class PetriNet {
 
     }
 
+    /* Devuelve el arreglo de tiempos */
     public Time[] getTimedTransitions(){ return timedTransitions; }
 
+    /* Devuelve el numero de plazas de la red */
+    public int getPlacesCount() {
+        return nPlaces;
+    }
+
+    /* Devuelve el numero de transiciones de la red */
+    public int getTransitionsCount() {
+        return nTransitions;
+    }
+
+    /**
+     *  Marcado
+     */
+
+    /* Devuelve el marcado inicial de la red */
+    public Integer[] getInitialMarking() {
+        return initialMarking;
+    }
+
+    /* Devuelve el marcado actual de la red */
+    public Integer[] getCurrentMarking() {
+        return currentMarking;
+    }
+
+    /* Comprueba que el marcado total de la red no sea cero */
+    private void checkMarking() throws DeadlockStateException {
+
+        for (Integer tokens : currentMarking) {
+            if (tokens > 0) {
+                return;
+            }
+        }
+
+        throw new DeadlockStateException("The net does not have any token");
+    }
+
+    /**
+     *  Matrices
+     */
+
+    /* Devuelve la matriz especificada */
+    public Integer[][] getMatrix(int index) {
+
+        Integer[][] def = { { 0 }, { 0 } };
+        Integer[][] marking = { initialMarking.clone(), currentMarking.clone() };
+
+        switch (index) {
+            case FIM:
+                return forwardMatrix;
+            case BIM:
+                return backwardMatrix;
+            case CIM:
+                return combinedIMatrix;
+            case INM:
+                return inhibitionMatrix;
+            case MRK:
+                return marking;
+            default:
+                return def;
+        }
+    }
 
     /* Se encarga de inicializar las matrices */
     private void setMatrices() {
@@ -346,31 +337,6 @@ public class PetriNet {
 
     }
 
-    /* Se encarga de contar la cantidad de plazas y transiciones de la red */
-    private void countPlacesAndTransitions() {
-
-        int p = 0;
-        int t = 0;
-
-        Pattern pattern = Pattern.compile("P\\d");
-        Matcher matcher = pattern.matcher(tableList.get(FIM));
-
-        while (matcher.find()) {
-            p++;
-        }
-
-        pattern = Pattern.compile("T\\d");
-        matcher = pattern.matcher(tableList.get(FIM));
-
-        while (matcher.find()) {
-            t++;
-        }
-
-        nPlaces = p;
-        nTransitions = t;
-
-    }
-
     /* Se encarga de generar matrices (2d) a partir de un String */
     private Integer[][] parseMatrix(String plainText, int rows, int columns) {
 
@@ -405,6 +371,81 @@ public class PetriNet {
 
         return matrix;
 
+    }
+
+    /* Se encarga de contar la cantidad de plazas y transiciones de la red */
+    private void countPlacesAndTransitions() {
+
+        int p = 0;
+        int t = 0;
+
+        Pattern pattern = Pattern.compile("P\\d");
+        Matcher matcher = pattern.matcher(tableList.get(FIM));
+
+        while (matcher.find()) {
+            p++;
+        }
+
+        pattern = Pattern.compile("T\\d");
+        matcher = pattern.matcher(tableList.get(FIM));
+
+        while (matcher.find()) {
+            t++;
+        }
+
+        nPlaces = p;
+        nTransitions = t;
+
+    }
+
+
+    /**
+     *  Debugging
+     */
+
+    /* Método para imprimir matrices, utilizado en el debugging */
+    public void printMatrix(Object[][] matrix) {
+
+        System.out.print("\n");
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.printf("%3s ", matrix[i][j].toString());
+            }
+            System.out.println("");
+        }
+
+        System.out.print("\n");
+
+    }
+
+    /* Método para imprimir matrices, utilizado en el debugging */
+    public void printMatrix(Object[] matrix) {
+
+        System.out.print("\n");
+
+        for (int i = 0; i < matrix.length; i++) {
+            System.out.printf("%3s ", matrix[i].toString());
+        }
+
+        System.out.print("\n\n");
+
+    }
+
+    /* Debugging, impime el marcado actual */
+    protected void printCurrentMarking() {
+        System.out.println("Current Marking");
+        printMatrix(currentMarking);
+    }
+
+    /* Debugging, imprime la sensibilizacion de las transiciones */
+    protected void printEnabled() {
+        System.out.print("Enabled Transitions: ");
+        boolean[] enabledTransitions = areEnabled();
+        for (int i = 0; i < enabledTransitions.length; i++) {
+            System.out.printf(" | T%d: %s | ", i + 1, enabledTransitions[i]);
+        }
+        System.out.print("\n\n");
     }
 
 }

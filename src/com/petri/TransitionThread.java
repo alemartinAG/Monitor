@@ -58,6 +58,11 @@ public class TransitionThread implements Runnable {
 
                 sleepTime = monitor.fireTransition(transition);
 
+                /* Si al tratar de disparar la transicion se le devolvio tiempo
+                    se le indica que la transicion tenia un tiempo y se encontraba
+                    fuera del intervalo, se duerme el hilo y trata de disparar nuevamente
+                    la misma transicion
+                 */
                 if(sleepTime > 0){
 
                     System.out.printf("@@@@ T%d is going to sleep %d [ms]\n", transition+1, sleepTime);
@@ -75,6 +80,7 @@ public class TransitionThread implements Runnable {
             }
         }
 
+        /* Sincronizacion para la finalizacion de la ejecucion */
         try {
             barrier.await();
         } catch (InterruptedException | BrokenBarrierException e) {
