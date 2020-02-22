@@ -17,12 +17,38 @@ public class FairPolicy implements Politicas {
 
         ArrayList<Integer> truev = trueVector(andVector);
 
-        System.out.print("****");
+        int[] p1 = {10,11};
+        int[] p2 = {12};
+        int[] p3 = {1,2,4,5,7,8};
+        int[] p4 = {14,15,16,17,3,6,9};
+        int[] p5 = {13,18};
+        int[] p6 = {19,20,21,22,23,24};
+
+        ArrayList<int[]> priorities = new ArrayList<>();
+        priorities.add(p1);
+        priorities.add(p2);
+        priorities.add(p3);
+        priorities.add(p4);
+        priorities.add(p5);
+        priorities.add(p6);
+
+
+        /*System.out.print("****");
         for(Integer tran : truev){
             System.out.printf(" %2d ", tran+1);
         }
-        System.out.println("****");
+        System.out.println("****");*/
 
+        for(int i=0; i<priorities.size(); i++){
+
+            for(int j=0; j<priorities.get(i).length; j++){
+
+                if(andVector[priorities.get(i)[j]-1]){
+                    return priorities.get(i)[j]-1;
+                }
+
+            }
+        }
         /*if(andVector[10]){
             return 10;
         }

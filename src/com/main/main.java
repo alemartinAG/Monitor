@@ -50,11 +50,12 @@ public class main {
 
         TInvariant tinv = new TInvariant();
 
-        try {
+        tinv.checkcheck();
+        /*try {
             tinv.checkInvariants(pn.getInitialMarking());
         } catch (IllegalPetriStateException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 

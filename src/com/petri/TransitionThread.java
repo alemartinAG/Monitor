@@ -48,11 +48,11 @@ public class TransitionThread implements Runnable {
             for(int i=0; i<transitions_number; i++){
 
                 /* Para no acaparar el semáforo */
-                /*try {
+                try {
                     Thread.sleep(new Random().nextInt(10));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }*/
+                }
 
                 transition = thread_transitions.get(i)-1;
 
