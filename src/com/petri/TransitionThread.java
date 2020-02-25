@@ -20,8 +20,9 @@ public class TransitionThread implements Runnable {
      * @param index número del thread según orden de creación
      * @param transitions transiciones asignadas al thread
      */
-    public TransitionThread(int index, ArrayList<Integer> transitions, CyclicBarrier barrier){
+    public TransitionThread(int index, ArrayList<Integer> transitions, GestorDeMonitor monitor,CyclicBarrier barrier){
         this.barrier = barrier;
+        this.monitor = monitor;
         thread_number = index;
         thread_transitions = new ArrayList<>();
         thread_transitions = transitions;
@@ -29,9 +30,9 @@ public class TransitionThread implements Runnable {
     }
 
     /* Le asigno el monitor */
-    public void setMonitor(GestorDeMonitor gestor){
+    /*public void setMonitor(GestorDeMonitor gestor){
         monitor = gestor;
-    }
+    }*/
 
     @Override
     public void run() {

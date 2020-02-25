@@ -187,7 +187,7 @@ public class TInvariant extends Invariant {
         Pattern pattern = Pattern.compile("(.+)(T\\d+)(.+\\s)");
         Matcher matcher = pattern.matcher(data);
 
-        data = matcher.replaceAll(" $2 ");
+        data = matcher.replaceAll("$2 ");
 
         System.out.println(data);
 
@@ -204,7 +204,7 @@ public class TInvariant extends Invariant {
 
             for(int i=0; i<invariant.size()-1; i++) {
                 invariantPattern += String.format("(T%d )(.+?)", invariant.get(i));
-                replace += String.format("$%d", i*2+2);
+                replace += String.format("- $%d", i*2+2);
             }
 
             invariantPattern += String.format("(T%d )", invariant.get(invariant.size()-1));
@@ -218,59 +218,86 @@ public class TInvariant extends Invariant {
 
         for(Matcher m : matchers){
             System.out.println("____ Pattern: "+m.pattern().pattern());
+            System.out.println("++++ Replace: "+replacers.get(matchers.indexOf(m)));
         }
 
         System.out.println("for ended @ "+new Timestamp(System.currentTimeMillis()));
 
         System.out.println("while @ "+new Timestamp(System.currentTimeMillis()));
 
-        while (matchers.size() > 0){
+        int matches = 0;
+        int invariant;
+        int position;
+        int beg;
+        Matcher m1;
 
-            int position = data.length();
-            int invariant = -1;
+        while (!matchers.isEmpty()){
+
+            position = data.length();
+            beg = position;
             Vector<Matcher> delete = new Vector<>();
+            m1 = null;
 
-            for(int i=0; i<matchers.size(); i++){
 
-                System.out.println("busco en "+i);
-                boolean found = matchers.get(i).find();
+            for(Matcher m : matchers){
+
+                boolean found = m.find();
 
                 if(!found){
-                    System.out.println("not found");
-                    delete.add(matchers.get(i));
-                    System.out.println("Elimino: "+i);
+                    delete.add(m);
                     /*matchers.remove(i);
                     replacers.remove(i);*/
                 }
                 else{
-                    System.out.println("found!!");
-                    int pos = matchers.get(i).end();
+                    int pos = m.end();
                     if(pos < position){
                         position = pos;
-                        invariant = i;
+                        m1 = m;
+                        beg = m.start();
                     }
+                    /*else if(pos == position){
+                        if(matchers.get(i).start() < beg){
+                            invariant = i;
+                            beg = matchers.get(i).start();
+                        }
+                    }*/
 
                 }
             }
-            System.out.print("///// eliminando.....");
+
+            /*for (Matcher m : matchers) {
+                m.reset(data);
+            }*/
+
+
+            if(m1 != null){
+                m1.reset();
+                data = matchers.get(matchers.indexOf(m1)).replaceFirst(replacers.get(matchers.indexOf(m1)));
+                matches++;
+                System.out.println("****** MATCHES: "+matches);
+                System.out.println("DATA SIZE == "+data.length());
+                System.out.println(data);
+
+                for (Matcher m : matchers) {
+                    m.reset(data);
+                }
+            }
+
 
             for (Matcher toremove : delete) {
+                System.out.println("REMOVING....");
+                /*System.out.println("____ Pattern: "+toremove.pattern().pattern());
+                System.out.println("++++ Replace: "+replacers.get(matchers.indexOf(toremove)));*/
                 replacers.remove(matchers.indexOf(toremove));
                 matchers.remove(toremove);
+                System.out.println("----Matchers left = "+matchers.size());
             }
 
-            System.out.println("eliminados;;; Ahora son "+matchers.size()+" \\\\\\\\\\\\");
 
-            if(invariant >= 0){
-                System.out.println(matchers.get(invariant).pattern().pattern()+" ++++ Primera ocurrencia");
-                data = matchers.get(invariant).replaceFirst(replacers.get(invariant));
-            }
-
-            for (Matcher m : matchers) {
-                m.reset(data);
-            }
 
         }
+
+        System.out.println("while ended @ "+new Timestamp(System.currentTimeMillis()));
 
         System.out.println("");
         System.out.println(data);
