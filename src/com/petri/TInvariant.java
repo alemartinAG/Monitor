@@ -194,6 +194,7 @@ public class TInvariant extends Invariant {
         Pattern[] patterns = new Pattern[invariantList.size()];
         ArrayList<String> replacers = new ArrayList<>();
         ArrayList<Matcher> matchers = new ArrayList<>();
+        ArrayList<ArrayList<String>> regex = new ArrayList<>();
 
         int index = 0;
 
@@ -201,17 +202,24 @@ public class TInvariant extends Invariant {
 
             String invariantPattern = "";
             String replace = "";
+            ArrayList<String> expression = new ArrayList<>();
 
             for(int i=0; i<invariant.size()-1; i++) {
-                invariantPattern += String.format("(T%d )(.+?)", invariant.get(i));
-                replace += String.format("- $%d", i*2+2);
+                invariantPattern += String.format("(?:T%d\\b)(.+?)", invariant.get(i));
+                //invariantPattern += String.format("(T%d\\b)(.+?)", invariant.get(i));
+                expression.add(String.format("(?:T%d\\b)", invariant.get(i)));
+                //expression.add("(.+?)");
+                expression.add("(.+?)");
+                replace += String.format("$%d", i+1);
             }
 
-            invariantPattern += String.format("(T%d )", invariant.get(invariant.size()-1));
+            invariantPattern += String.format("(?:T%d\\b)", invariant.get(invariant.size()-1));
+            expression.add(String.format("(?:T%d\\b)", invariant.get(invariant.size()-1)));
 
             patterns[index] = Pattern.compile(invariantPattern);
             matchers.add(patterns[index].matcher(data));
             replacers.add(replace);
+            regex.add(expression);
 
             index++;
         }
@@ -226,7 +234,6 @@ public class TInvariant extends Invariant {
         System.out.println("while @ "+new Timestamp(System.currentTimeMillis()));
 
         int matches = 0;
-        int invariant;
         int position;
         int beg;
         Matcher m1;
@@ -239,58 +246,78 @@ public class TInvariant extends Invariant {
             m1 = null;
 
 
-            for(Matcher m : matchers){
+            for(Matcher m : matchers) {
 
                 boolean found = m.find();
 
-                if(!found){
+                if (!found) {
                     delete.add(m);
-                    /*matchers.remove(i);
-                    replacers.remove(i);*/
                 }
-                else{
-                    int pos = m.end();
-                    if(pos < position){
-                        position = pos;
-                        m1 = m;
-                        beg = m.start();
-                    }
-                    /*else if(pos == position){
-                        if(matchers.get(i).start() < beg){
-                            invariant = i;
-                            beg = matchers.get(i).start();
-                        }
-                    }*/
+                else {
 
+                    int first = m.start();
+                    if (first < beg) {
+                        beg = first;
+                        m1 = m;
+                    } else if (first == beg) {
+
+                        int prevIndex = matchers.indexOf(m1);
+                        int thisIndex = matchers.indexOf(m);
+
+                        for(int i=0; i<regex.get(prevIndex).size(); i++){
+
+                            String prevGroup = regex.get(prevIndex).get(i);
+                            String thisGroup = regex.get(thisIndex).get(i);
+
+                            if(!prevGroup.equals(thisGroup)){
+
+                                Pattern prevPattern = Pattern.compile(prevGroup);
+                                Matcher prevMatcher = prevPattern.matcher(data);
+
+                                prevMatcher.find();
+
+                                Pattern thisPattern = Pattern.compile(thisGroup);
+                                Matcher thisMatcher = thisPattern.matcher(data);
+
+                                thisMatcher.find();
+
+                                int p = prevMatcher.start();
+                                int t = thisMatcher.start();
+
+                                if(t < p){
+                                    m1 = m;
+                                    break;
+                                }
+                                 break;
+
+                            }
+                        }
+
+                    }
                 }
             }
 
-            /*for (Matcher m : matchers) {
-                m.reset(data);
-            }*/
-
 
             if(m1 != null){
-                m1.reset();
                 data = matchers.get(matchers.indexOf(m1)).replaceFirst(replacers.get(matchers.indexOf(m1)));
+
+                Pattern space = Pattern.compile("(\\s{2,})");
+                Matcher mat = space.matcher(data);
+                data = mat.replaceAll(" ");
+
                 matches++;
-                System.out.println("****** MATCHES: "+matches);
-                System.out.println("DATA SIZE == "+data.length());
                 System.out.println(data);
+                System.out.println("@@@@"+matches);
 
                 for (Matcher m : matchers) {
                     m.reset(data);
                 }
             }
 
-
             for (Matcher toremove : delete) {
-                System.out.println("REMOVING....");
-                /*System.out.println("____ Pattern: "+toremove.pattern().pattern());
-                System.out.println("++++ Replace: "+replacers.get(matchers.indexOf(toremove)));*/
                 replacers.remove(matchers.indexOf(toremove));
+                regex.remove(matchers.indexOf(toremove));
                 matchers.remove(toremove);
-                System.out.println("----Matchers left = "+matchers.size());
             }
 
 
@@ -301,6 +328,26 @@ public class TInvariant extends Invariant {
 
         System.out.println("");
         System.out.println(data);
+
+        //----------------------------------------------------------------------------------------------------------------------------
+
+        /*matchers.clear();
+        replacers.clear();
+        index = 1;
+
+        for(int i=0; i<invariantList.size(); i++){
+
+            for(int j=0; j<regex.get(i).size()-index; j++){
+
+            }
+            patterns[index] = Pattern.compile(invariantPattern);
+            matchers.add(patterns[index].matcher(data));
+            replacers.add(replace);
+
+        }
+
+        System.out.println("");
+        System.out.println(data);*/
 
 
     }

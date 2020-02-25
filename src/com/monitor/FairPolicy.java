@@ -3,6 +3,7 @@ package com.monitor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Vector;
 
 public class FairPolicy implements Politicas {
 
@@ -18,11 +19,13 @@ public class FairPolicy implements Politicas {
         ArrayList<Integer> truev = trueVector(andVector);
 
         int[] p1 = {10,11};
-        int[] p2 = {12};
+        int[] p2 = {14};
         int[] p3 = {1,2,4,5,7,8};
-        int[] p4 = {14,15,16,17,3,6,9};
-        int[] p5 = {13,18};
-        int[] p6 = {19,20,21,22,23,24};
+        int[] p4 = {12};
+        int[] p5 = {15,16,17,3,6,9};
+        int[] p6 = {13,18};
+        int[] p7 = {21,24,22};
+        int[] p8 = {20,19,23};
 
         ArrayList<int[]> priorities = new ArrayList<>();
         priorities.add(p1);
@@ -31,75 +34,26 @@ public class FairPolicy implements Politicas {
         priorities.add(p4);
         priorities.add(p5);
         priorities.add(p6);
+        priorities.add(p7);
+        priorities.add(p8);
 
-
-        /*System.out.print("****");
-        for(Integer tran : truev){
-            System.out.printf(" %2d ", tran+1);
-        }
-        System.out.println("****");*/
 
         for(int i=0; i<priorities.size(); i++){
 
             for(int j=0; j<priorities.get(i).length; j++){
+                Vector<Integer> enabled = new Vector<>();
 
                 if(andVector[priorities.get(i)[j]-1]){
-                    return priorities.get(i)[j]-1;
+                    //return priorities.get(i)[j]-1;
+                    enabled.add(priorities.get(i)[j]-1);
+                }
+
+                if(!enabled.isEmpty()){
+                    return enabled.get(new Random().nextInt(enabled.size()));
                 }
 
             }
         }
-        /*if(andVector[10]){
-            return 10;
-        }
-
-        if(andVector[9]){
-            return 9;
-        }
-
-        if(andVector[0])
-            return 0;
-
-        if(andVector[3])
-            return 3;
-
-        if(andVector[6])
-            return 6;
-
-        if(andVector[11]){
-            System.out.println("-----> T12");
-            return 11;
-        }
-
-        if(andVector[18] && andVector[21]){
-            if(new Random().nextInt(1) > 0.5){
-                return 18;
-            }
-            else{
-                return 21;
-            }
-        }*/
-
-        /*if(andVector[19])
-            return 19;
-
-        if(andVector[20])
-            return 20;
-
-        if(andVector[22])
-            return 22;
-
-        if(andVector[23])
-            return 23;*/
-
-        /*for(int i=0; i<andVector.length; i++){
-
-            if(andVector[i]){
-                System.out.println("-----> T"+String.valueOf(i+1));
-                return i;
-            }
-
-        }*/
 
         int transition =  trueVector(andVector).get(new Random().nextInt(trueVector(andVector).size()));
         System.out.println("-----> T" + (transition + 1));

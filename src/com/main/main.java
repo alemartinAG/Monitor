@@ -18,8 +18,8 @@ public class main {
 
     public static void main(String[] args) {
 
-        PetriNet pn = new PetriNet(true);
-        GestorDeMonitor monitor = new GestorDeMonitor(pn, 1000);
+        /*PetriNet pn = new PetriNet(true);
+        GestorDeMonitor monitor = new GestorDeMonitor(pn, 500);
         ThreadDistribution threadDistr = new ThreadDistribution();
 
         System.out.println("Combined Incidence Matrix");
@@ -50,7 +50,7 @@ public class main {
 
         } catch (InterruptedException | BrokenBarrierException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
         TInvariant tinv = new TInvariant();
