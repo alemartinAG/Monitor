@@ -7,17 +7,19 @@ import com.petri.PetriNet;
 import com.util.Log;
 import com.util.Mutex;
 
-import java.sql.Timestamp;
 import java.util.Arrays;
 
 public class GestorDeMonitor {
+
+    //private static final String POLPATH = "res/politica_piso-abajo.txt";
+    private static final String POLPATH = "res/politica_random.txt";
 
     private static final long NOWAIT = 0;
 
     private Mutex mutex;
     private PetriNet petriNet;
     private Colas queues;
-    private Politicas policy;
+    private Politica policy;
     private Log eventLog = new Log();
     private int transitionsLeft;
     private int transitionsTotal;
@@ -34,7 +36,7 @@ public class GestorDeMonitor {
 
         mutex = new Mutex();
         petriNet = net;
-        policy = new FairPolicy();
+        policy = new Politica(POLPATH);
         queues = new Colas(petriNet.getTransitionsCount());
         transitionsLeft = limit;
         transitionsTotal = limit;

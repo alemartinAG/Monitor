@@ -138,7 +138,6 @@ public class PetriNet {
             // Si luego de dispararse sigue sensibilizada igual debo actualizar el ts
             timed.setNewTimeStamp();
 
-
         }
 
         /* Genero vector delta para calcular función de transferencia */

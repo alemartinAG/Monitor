@@ -21,7 +21,6 @@ public class TInvariant extends Invariant {
 
     public TInvariant(){
         parseInvariants(INVPATH);
-
     }
 
     public TInvariant(String file){
@@ -328,26 +327,6 @@ public class TInvariant extends Invariant {
 
         System.out.println("");
         System.out.println(data);
-
-        //----------------------------------------------------------------------------------------------------------------------------
-
-        /*matchers.clear();
-        replacers.clear();
-        index = 1;
-
-        for(int i=0; i<invariantList.size(); i++){
-
-            for(int j=0; j<regex.get(i).size()-index; j++){
-
-            }
-            patterns[index] = Pattern.compile(invariantPattern);
-            matchers.add(patterns[index].matcher(data));
-            replacers.add(replace);
-
-        }
-
-        System.out.println("");
-        System.out.println(data);*/
 
 
     }

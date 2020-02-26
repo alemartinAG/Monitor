@@ -3,28 +3,18 @@ package com.monitor;
 import com.util.Parser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Vector;
 
-public class FairPolicy {
+public class Politica {
 
     private ArrayList<ArrayList<Integer>> priorities;
 
-    public FairPolicy(String file){
+    public Politica(String file){
         priorities = new Parser(file, "\\d+", "(", ")").getParsedElements();
-
-        for(ArrayList<Integer> p : priorities){
-            for(Integer i : p){
-                System.out.printf("%2d ", i);
-            }
-
-            System.out.println("");
-        }
     }
 
-    @Override
-    public  int getNext(boolean[] andVector) {
+    public int getNext(boolean[] andVector) {
 
         for (ArrayList<Integer> priority : priorities) {
             for (int j = 0; j < priority.size(); j++) {
@@ -57,4 +47,6 @@ public class FairPolicy {
 
         return candidates;
     }
+
+    public ArrayList<ArrayList<Integer>> getPriorities(){return priorities;}
 }

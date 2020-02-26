@@ -6,7 +6,7 @@ public class Time {
 
 
     // Alpha y Beta se pasan de segundos a milisegundos
-    private final static int RATIO = 100;
+    public final static int RATIO = 100;
 
     private int alpha, beta;
     private long elapsedTime;

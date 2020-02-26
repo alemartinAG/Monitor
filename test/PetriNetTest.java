@@ -1,4 +1,5 @@
 
+import com.errors.OutsideWindowException;
 import com.petri.PetriNet;
 import com.petri.Time;
 import org.junit.Assert;
@@ -45,27 +46,37 @@ public class PetriNetTest {
         }
 
         Arrays.fill(timed_t1, null);
-        timed_t1[0] = new Time(10, 20);
-        timed_t1[2] = new Time(10, 20);
+        timed_t1[0] = new Time(0, 200);
+        timed_t1[2] = new Time(0, 200);
 
     }
 
-    /*@Test
+    @Test
     public void triggerLogicTest() {
 
-        Assert.assertTrue(pn.trigger(0));
-        Assert.assertFalse(pn.trigger(3));
+        try {
 
-        Assert.assertTrue(pn.trigger(1));
-        Assert.assertFalse(pn.trigger(0));
+            timed_t1[0].setNewTimeStamp();
+            Assert.assertTrue(pn.trigger(0));
 
-        Assert.assertTrue(pn.trigger(2));
+            Assert.assertFalse(pn.trigger(3));
 
-        Assert.assertTrue(pn.trigger(3));
-        Assert.assertTrue(pn.trigger(4));
-        Assert.assertTrue(pn.trigger(5));
+            Assert.assertTrue(pn.trigger(1));
+            Assert.assertFalse(pn.trigger(0));
 
-    }*/
+            timed_t1[2].setNewTimeStamp();
+            Assert.assertTrue(pn.trigger(2));
+
+            Assert.assertTrue(pn.trigger(3));
+            Assert.assertTrue(pn.trigger(4));
+            Assert.assertTrue(pn.trigger(5));
+
+        } catch (OutsideWindowException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     @Test
     public void countTest() {
@@ -83,20 +94,31 @@ public class PetriNetTest {
 
     }
 
-    /*@Test
+    @Test
     public void areEnabledTest() {
 
         Assert.assertArrayEquals(enabled, pn.areEnabled());
         Assert.assertFalse(Arrays.equals(enabled_t1, pn.areEnabled()));
 
-        pn.trigger(0);
-        Assert.assertArrayEquals(enabled_t1, pn.areEnabled());
-        pn.trigger(1);
-        pn.trigger(2);
+        for(int i=0; i<enabled.length; i++){
+            if(timed_t1[i] != null && enabled[i]){
+                timed_t1[i].setNewTimeStamp();
+            }
+        }
 
-        pn.trigger(3);
-        Assert.assertArrayEquals(enabled_t4, pn.areEnabled());
-    }*/
+        try{
+            pn.trigger(0);
+            Assert.assertArrayEquals(enabled_t1, pn.areEnabled());
+            pn.trigger(1);
+            pn.trigger(2);
+
+            pn.trigger(3);
+            Assert.assertArrayEquals(enabled_t4, pn.areEnabled());
+        } catch (OutsideWindowException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @Test
     public void setTimedTransitionsTest(){

@@ -18,8 +18,8 @@ public class main {
 
     public static void main(String[] args) {
 
-        /*PetriNet pn = new PetriNet(true);
-        GestorDeMonitor monitor = new GestorDeMonitor(pn, 500);
+        PetriNet pn = new PetriNet(true);
+        GestorDeMonitor monitor = new GestorDeMonitor(pn, 1000);
         ThreadDistribution threadDistr = new ThreadDistribution();
 
         System.out.println("Combined Incidence Matrix");
@@ -35,7 +35,7 @@ public class main {
 
         for (int i = 0; i < n_threads; i++) {
 
-            TransitionThread transitionThread = new TransitionThread(i, threadDistr.getTransitionsOfThread(i), monitor,barrier);
+            TransitionThread transitionThread = new TransitionThread(i, threadDistr.getTransitionsOfThread(i), monitor, barrier);
             //transitionThread.setMonitor(monitor);
 
             System.out.printf("Run Thread-%d/%d!\n", i + 1, threadDistr.getNumberOfThreads());
@@ -50,18 +50,7 @@ public class main {
 
         } catch (InterruptedException | BrokenBarrierException e) {
             e.printStackTrace();
-        }*/
-
-
-        TInvariant tinv = new TInvariant();
-
-        tinv.checkcheck();
-        /*try {
-            tinv.checkInvariants(pn.getInitialMarking());
-        } catch (IllegalPetriStateException e) {
-            e.printStackTrace();
-        }*/
-
+        }
     }
 
 }
