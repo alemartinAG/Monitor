@@ -1,6 +1,4 @@
 *.txt
 *.html
 *.pdf
-!petri-test.html
-!threads-test.txt
-!timed-test.txt
+!*test.txt
