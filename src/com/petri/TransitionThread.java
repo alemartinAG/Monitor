@@ -20,8 +20,9 @@ public class TransitionThread implements Runnable {
      * @param index número del thread según orden de creación
      * @param transitions transiciones asignadas al thread
      */
-    public TransitionThread(int index, ArrayList<Integer> transitions, CyclicBarrier barrier){
+    public TransitionThread(int index, ArrayList<Integer> transitions, GestorDeMonitor monitor,CyclicBarrier barrier){
         this.barrier = barrier;
+        this.monitor = monitor;
         thread_number = index;
         thread_transitions = new ArrayList<>();
         thread_transitions = transitions;
@@ -29,15 +30,18 @@ public class TransitionThread implements Runnable {
     }
 
     /* Le asigno el monitor */
-    public void setMonitor(GestorDeMonitor gestor){
+    /*public void setMonitor(GestorDeMonitor gestor){
         monitor = gestor;
-    }
+    }*/
 
     @Override
     public void run() {
 
         // Seteo el nombre del thread de acuerdo al orden de creacion
         Thread.currentThread().setName(String.format("%d", thread_number));
+
+        int transition;
+        long sleepTime;
 
         while(GestorDeMonitor.keeprunning){
 
@@ -46,15 +50,38 @@ public class TransitionThread implements Runnable {
 
                 /* Para no acaparar el semáforo */
                 try {
-                    Thread.sleep(new Random().nextInt(20));
+                    Thread.sleep(new Random().nextInt(10));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                monitor.fireTransition(thread_transitions.get(i)-1);
+                transition = thread_transitions.get(i)-1;
+
+                sleepTime = monitor.fireTransition(transition);
+
+                /* Si al tratar de disparar la transicion se le devolvio tiempo
+                    se le indica que la transicion tenia un tiempo y se encontraba
+                    fuera del intervalo, se duerme el hilo y trata de disparar nuevamente
+                    la misma transicion
+                 */
+                if(sleepTime > 0){
+
+                    //System.out.printf("@@@@ T%d is going to sleep %d [ms]\n", transition+1, sleepTime);
+
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    monitor.fireTransition(transition);
+                }
+
+
             }
         }
 
+        /* Sincronizacion para la finalizacion de la ejecucion */
         try {
             barrier.await();
         } catch (InterruptedException | BrokenBarrierException e) {

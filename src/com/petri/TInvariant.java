@@ -1,31 +1,27 @@
 package com.petri;
 
 import com.errors.IllegalPetriStateException;
-import com.util.Parser;
+import com.errors.OutsideWindowException;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TInvariant extends Invariant {
 
     private final static String LOGPATH = "res/log.txt";
+    private final static String REGPATH = "res/regex.txt";
     private final static String INVPATH = "res/t-invariantes.txt";
-
-    private ArrayList<ArrayList<Integer>> stateList;
 
     public TInvariant(){
         parseInvariants(INVPATH);
-        stateList = parseLogStates();
     }
 
     public TInvariant(String file){
         parseInvariants(file);
-        stateList = parseLogStates();
     }
 
 
@@ -33,7 +29,7 @@ public class TInvariant extends Invariant {
          invariante de transición, de manera ordenada, el marcado (o estado) de la red,
          sea el mismo en el que se encontraba tras disparar la última transición de la simulación */
     @Override
-    public boolean checkInvariants(Integer[] initialState) throws IllegalPetriStateException {
+    public void checkInvariants(Integer[] initialState) throws IllegalPetriStateException{
 
         String data = "";
 
@@ -43,46 +39,65 @@ public class TInvariant extends Invariant {
             e.printStackTrace();
         }
 
-        for(ArrayList<Integer> invariant : invariantList){
-
-            String pattern = "";
-            String replace = "";
-
-            for(int i=0; i<invariant.size()-1; i++) {
-                pattern += String.format("(T%d)([\\S\\s]+?)", invariant.get(i));
-                replace += String.format("$%d", i*2+2);
-            }
-
-            pattern += String.format("(T%d)", invariant.get(invariant.size()-1));
-
-            data = data.replaceAll(pattern, replace);
-
-        }
-
-        Pattern pattern = Pattern.compile("(T\\d+)");
+        Pattern pattern = Pattern.compile("(.+)(T\\d+)(.+\\s)");
         Matcher matcher = pattern.matcher(data);
 
-        PetriNet petriTest = new PetriNet();
+        data = matcher.replaceAll("$2 ");
 
-        while (matcher.find()) {
-            int partial = Integer.parseInt(matcher.group().replaceAll("T", ""));
-            petriTest.trigger(partial-1);
+        System.out.println(data);
+
+        String expressions = "";
+
+        try {
+            expressions = new String(Files.readAllBytes(Paths.get(REGPATH)));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-//        System.out.println(Arrays.toString(petriTest.getCurrentMarking()));
-//        System.out.println(Arrays.toString(stateList.get(stateList.size()-1).toArray()));
+        Pattern regexPattern = Pattern.compile("(?:Regex.+:\\s)(.+)");
+        Pattern replacePattern = Pattern.compile("(?:Replace.+:\\s)(.+)");
+        Matcher regexMatcher = regexPattern.matcher(expressions);
+        Matcher replaceMatcher = replacePattern.matcher(expressions);
 
-        //TODO: ANDA DE VEZ EN CUANDO, VER COMO ES REALMENTE
-        if(Arrays.equals(stateList.get(stateList.size()-1).toArray(), petriTest.getCurrentMarking())){
-            return true;
-        }
-        else {
-            throw new IllegalPetriStateException("T-Invariants are not met");
-        }
-    }
+        ArrayList<String> regex = new ArrayList<>();
+        ArrayList<String> replacers = new ArrayList<>();
 
-    /* Se encarga de parsear los estados del log */
-    private ArrayList<ArrayList<Integer>> parseLogStates(){
-        return new Parser(LOGPATH, "\\d+", "[", "]").getParsedElements();
+        while (regexMatcher.find()){
+            regex.add(regexMatcher.group(1));
+        }
+
+        while(replaceMatcher.find()){
+            replacers.add(replaceMatcher.group(1));
+        }
+
+        if(replacers.size() != regex.size()){
+            System.out.println("Regular Expressions and Replacer doesn't match");
+            return;
+        }
+
+        for(String expr : regex){
+
+            pattern = Pattern.compile(expr);
+            matcher = pattern.matcher(data);
+
+            while (matcher.find()){
+                data = matcher.replaceFirst(replacers.get(regex.indexOf(expr)));
+                matcher.reset(data);
+            }
+
+            pattern = Pattern.compile("(\\s{2,})");
+            matcher = pattern.matcher(data);
+            data = matcher.replaceAll(" ");
+
+            System.out.println(regex.indexOf(expr)+" --> "+data);
+        }
+
+        pattern = Pattern.compile("(\\s{2,})");
+        matcher = pattern.matcher(data);
+        data = matcher.replaceAll(" ");
+
+        System.out.println(data);
+
+
     }
 }

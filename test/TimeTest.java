@@ -3,28 +3,30 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Timestamp;
-
 public class TimeTest {
 
     private Time time1;
+    private int alpha = 2;
+    private int beta = 5;
 
     @Before
     public void setUp () {
-        time1 = new Time(1, 3);
+        time1 = new Time(alpha, beta);
     }
 
     @Test
-    public void testInsideWindow() throws Exception {
-        // Verifica que el tiempo actual se encuentre dentro de la ventana de tiempo
+    public void testWindow() throws Exception {
+
+        //Simulo el sensibilizado
+        time1.setNewTimeStamp();
 
         Assert.assertFalse(time1.testTimeWindow());
 
-        // Duermo el hilo por 2 segundos
-        Thread.sleep( 2000);
+        // Duermo el hilo para que se encuentre dentro de la ventana
+        Thread.sleep( alpha*Time.RATIO);
         Assert.assertTrue(time1.testTimeWindow());
 
-        Thread.sleep( 3000);
+        Thread.sleep(beta*Time.RATIO);
         Assert.assertFalse(time1.testTimeWindow());
     }
 
@@ -32,20 +34,25 @@ public class TimeTest {
     public void testNewTimestamp () throws Exception {
         // Verifica que un nuevo timestamp sea mayor al anterior
 
-        int oldTs = time1.getTimestamp().getNanos();
-        Thread.sleep( 1);
         time1.setNewTimeStamp();
-        int newTs = time1.getTimestamp().getNanos();
+        long oldTs = time1.getTimestamp().getTime();
+        Thread.sleep( alpha*Time.RATIO);
+        time1.setNewTimeStamp();
+        long newTs = time1.getTimestamp().getTime();
 
         Assert.assertTrue(newTs > oldTs);
     }
 
     @Test
     public void sleepTimeInsideWindow () throws Exception{
+
         /*
-        Verifica si el tiempo para dormir el hilo
-        permitirá que luego ingrese a al ventana.
+            Verifica si el tiempo para dormir el hilo
+            permitirá que luego ingrese a al ventana.
         */
+
+        //simulo la sensibilizacion
+        time1.setNewTimeStamp();
 
         long sleepTime = time1.getSleepTime();
         Thread.sleep(sleepTime);

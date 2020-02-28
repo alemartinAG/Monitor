@@ -6,7 +6,6 @@ import com.petri.PetriNet;
 import com.petri.TInvariant;
 import com.util.ThreadDistribution;
 import com.petri.TransitionThread;
-
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -14,11 +13,14 @@ public class main {
 
     public static void main(String[] args) {
 
-        PetriNet pn = new PetriNet();
-        GestorDeMonitor monitor = new GestorDeMonitor(pn, 200);
+        PetriNet pn = new PetriNet(true);
+        GestorDeMonitor monitor = new GestorDeMonitor(pn, 1500);
         ThreadDistribution threadDistr = new ThreadDistribution();
 
+        System.out.println("Combined Incidence Matrix");
         pn.printMatrix(pn.getMatrix(PetriNet.CIM));
+        System.out.println("Inhibition Matrix");
+        pn.printMatrix(pn.getMatrix(PetriNet.INM));
 
         threadDistr.printThreads();
 
@@ -28,8 +30,7 @@ public class main {
 
         for (int i = 0; i < n_threads; i++) {
 
-            TransitionThread transitionThread = new TransitionThread(i, threadDistr.getTransitionsOfThread(i), barrier);
-            transitionThread.setMonitor(monitor);
+            TransitionThread transitionThread = new TransitionThread(i, threadDistr.getTransitionsOfThread(i), monitor, barrier);
 
             System.out.printf("Run Thread-%d/%d!\n", i + 1, threadDistr.getNumberOfThreads());
 
@@ -45,14 +46,12 @@ public class main {
             e.printStackTrace();
         }
 
-        TInvariant tinv = new TInvariant();
-
+        TInvariant tInvariant = new TInvariant();
         try {
-            tinv.checkInvariants(pn.getInitialMarking());
+            tInvariant.checkInvariants(null);
         } catch (IllegalPetriStateException e) {
             e.printStackTrace();
         }
-
     }
 
 }

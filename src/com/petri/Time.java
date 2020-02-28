@@ -6,16 +6,15 @@ public class Time {
 
 
     // Alpha y Beta se pasan de segundos a milisegundos
-    private final static int RATIO = 1000;
+    public final static int RATIO = 100;
 
     private int alpha, beta;
-    private boolean beforeWindow, waiting = false;
+    private long elapsedTime;
     private Timestamp timeStamp;
 
     public Time(int alpha, int beta) {
         this.alpha = alpha * RATIO;
         this.beta = beta * RATIO;
-        this.timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
     public boolean testTimeWindow() {
@@ -24,42 +23,32 @@ public class Time {
 
         if (now >= alpha && now <= beta) {
             return true;
-        } else {
-            // Compruebo si estoy antes de la ventana
-            if (now < alpha) {
-                beforeWindow = true;
-            } else {
-                beforeWindow = false;
-            }
         }
 
         return false;
     }
 
     public void setNewTimeStamp() {
-        this.timeStamp = new Timestamp(System.currentTimeMillis());
+        timeStamp = new Timestamp(System.currentTimeMillis());
     }
 
-    public boolean beforeWindow() {
-        return beforeWindow;
+    void setElapsedTime(){
+        elapsedTime = System.currentTimeMillis() - timeStamp.getTime();
     }
 
-    public void setWaiting() {
-        waiting = true;
-    }
+    public long getElapsedTime(){return elapsedTime;}
 
-    public boolean isWaiting(){
-        return waiting;
+    boolean beforeWindow() {
+        return (System.currentTimeMillis() - timeStamp.getTime()) < alpha;
     }
 
     public long getSleepTime(){
-        return timeStamp.getTime() + alpha - System.currentTimeMillis();
+
+        long enabledTime = timeStamp.getTime();
+        long now = System.currentTimeMillis();
+
+        return (enabledTime + alpha) - now;
     }
-
-    public void resetWaiting() {
-
-    }
-
     public int getAlpha(){return alpha/RATIO;}
     public int getBeta(){return beta/RATIO;}
     public Timestamp getTimestamp(){return timeStamp;}
