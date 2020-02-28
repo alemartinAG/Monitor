@@ -195,15 +195,10 @@ public class PetriNet {
 
 
             // Chequeo si una transicion con tiempo paso a estar habilitada y actualizo su ts
-            //TODO: Si se pasa del intervalo muere???
             if(enabledTransitions[t] && timedTransitions[t] != null && !previouslyEnabled[t]){
                 timedTransitions[t].setNewTimeStamp();
             }
 
-            /*if(enabledTransitions[t] && timedTransitions[t] != null && !timedTransitions[t].isWaiting()){
-                timedTransitions[t].setNewTimeStamp();
-                //timedTransitions[t].setWaiting();
-            }*/
         }
 
         return enabledTransitions;

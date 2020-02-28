@@ -6,13 +6,8 @@ import com.petri.PetriNet;
 import com.petri.TInvariant;
 import com.util.ThreadDistribution;
 import com.petri.TransitionThread;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Vector;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-import java.util.regex.Matcher;
 
 public class main {
 
@@ -36,7 +31,6 @@ public class main {
         for (int i = 0; i < n_threads; i++) {
 
             TransitionThread transitionThread = new TransitionThread(i, threadDistr.getTransitionsOfThread(i), monitor, barrier);
-            //transitionThread.setMonitor(monitor);
 
             System.out.printf("Run Thread-%d/%d!\n", i + 1, threadDistr.getNumberOfThreads());
 
@@ -53,7 +47,11 @@ public class main {
         }
 
         TInvariant tInvariant = new TInvariant();
-        tInvariant.pythoncheck();
+        try {
+            tInvariant.checkInvariants(null);
+        } catch (IllegalPetriStateException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -42,22 +42,6 @@ public class Time {
         return (System.currentTimeMillis() - timeStamp.getTime()) < alpha;
     }
 
-    // TODO: para que me sirven???
-    /*
-    private boolean waiting = false;
-
-    void setWaiting() {
-        waiting = true;
-    }
-
-    void resetWaiting() {
-        waiting = false;
-    }
-
-    boolean isWaiting(){
-        return waiting;
-    }*/
-
     public long getSleepTime(){
 
         long enabledTime = timeStamp.getTime();

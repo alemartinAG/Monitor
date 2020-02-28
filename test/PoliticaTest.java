@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class PoliticaTest {
 
-    private static final String PATH = "res/politica_test.txt";
+    private static final String PATH = "res-test/politica_test.txt";
     private static final int[][] prioridades = {{1,2,3},{4,5,6},{7}};
 
     //Should return T1

@@ -24,7 +24,7 @@ public class PInvariant extends Invariant{
     /* Chequea que la suma de tokens en las plazas
     de la invariante se mantenga siempre igual */
     @Override
-    public boolean checkInvariants(Integer[] currentMarking) throws IllegalPetriStateException {
+    public void checkInvariants(Integer[] currentMarking) throws IllegalPetriStateException {
 
         int index = 0;
         for (ArrayList<Integer> invariant : invariantList) {
@@ -40,8 +40,6 @@ public class PInvariant extends Invariant{
 
             index++;
         }
-
-        return true;
     }
 
     /* Setea la cantidad inicial de tokens para cada invariante */

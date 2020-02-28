@@ -10,8 +10,8 @@ import java.util.Arrays;
 
 public class PetriNetTest {
 
-    private static final String PETRI = "res/petri-test.html";
-    private static final String TIMED = "res/timed-test.txt";
+    private static final String PETRI = "res-test/petri-test.html";
+    private static final String TIMED = "res-test/timed-test.txt";
 
     private PetriNet pn;
     private final static int TRANSITIONS = 6;

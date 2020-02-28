@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class ThreadDistributionTest {
 
+    private static final String DISTRPATH = "res-test/threads-test.txt";
+
     private static final int N_THREADS = 2;
     private static final int[] T0 = {1,2,3};
     private static final int[] T1 = {4,5,6};
@@ -18,7 +20,7 @@ public class ThreadDistributionTest {
 
     @Before
     public void setUp() throws Exception {
-        td = new ThreadDistribution("res/threads-test.txt");
+        td = new ThreadDistribution(DISTRPATH);
 
         thread0 = new ArrayList<>();
         thread1 = new ArrayList<>();

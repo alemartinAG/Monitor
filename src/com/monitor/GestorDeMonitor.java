@@ -104,8 +104,6 @@ public class GestorDeMonitor {
                         }
                     }
 
-                    //System.out.println("AV: "+Arrays.toString(andVector));
-
                     if (m) {
 
                         queues.wakeThread(policy.getNext(andVector));
