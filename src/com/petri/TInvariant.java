@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 public class TInvariant extends Invariant {
 
     private final static String LOGPATH = "res/log.txt";
+    private final static String REGPATH = "res/regex.txt";
     private final static String INVPATH = "res/t-invariantes.txt";
 
     public TInvariant(){
@@ -171,6 +172,85 @@ public class TInvariant extends Invariant {
         System.out.println("T-invariants are met");
 
         return true;
+    }
+
+    public void pythoncheck(){
+
+        String data = "";
+
+        try {
+            data = new String(Files.readAllBytes(Paths.get(LOGPATH)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Pattern pattern = Pattern.compile("(.+)(T\\d+)(.+\\s)");
+        Matcher matcher = pattern.matcher(data);
+
+        data = matcher.replaceAll("$2 ");
+
+        System.out.println(data);
+
+        String expressions = "";
+
+        try {
+            expressions = new String(Files.readAllBytes(Paths.get(REGPATH)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Pattern regexPattern = Pattern.compile("(?:Regex.+:\\s)(.+)");
+        Pattern replacePattern = Pattern.compile("(?:Replace.+:\\s)(.+)");
+        Matcher regexMatcher = regexPattern.matcher(expressions);
+        Matcher replaceMatcher = replacePattern.matcher(expressions);
+
+        ArrayList<String> regex = new ArrayList<>();
+        ArrayList<String> replacers = new ArrayList<>();
+
+        while (regexMatcher.find()){
+            regex.add(regexMatcher.group(1));
+        }
+
+        while(replaceMatcher.find()){
+            replacers.add(replaceMatcher.group(1));
+        }
+
+        if(replacers.size() != regex.size()){
+            System.out.println("Regular Expressions and Replacer doesn't match");
+            return;
+        }
+
+        for(String expr : regex){
+
+            pattern = Pattern.compile(expr);
+            matcher = pattern.matcher(data);
+
+            while (matcher.find()){
+                data = matcher.replaceFirst(replacers.get(regex.indexOf(expr)));
+                matcher.reset(data);
+            }
+
+            pattern = Pattern.compile("(\\s{2,})");
+            matcher = pattern.matcher(data);
+            data = matcher.replaceAll(" ");
+
+            System.out.println(regex.indexOf(expr)+" --> "+data);
+        }
+
+
+        /*System.out.println(data);
+
+        pattern = Pattern.compile("(?:T11\\b)(.+?)(?:T10\\b)");
+        matcher = pattern.matcher(data);
+        data = matcher.replaceAll("$1");*/
+
+        pattern = Pattern.compile("(\\s{2,})");
+        matcher = pattern.matcher(data);
+        data = matcher.replaceAll(" ");
+
+        System.out.println(data);
+
+
     }
 
     public void checkcheck(){
