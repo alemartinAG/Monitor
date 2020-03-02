@@ -10,176 +10,224 @@
         <label/>
         <place>
             <id>P1</id>
-            <x>-577</x>
-            <y>-125</y>
+            <x>-632</x>
+            <y>-84</y>
             <label>P1</label>
+            <tokens>0</tokens>
+            <isStatic>false</isStatic>
+        </place>
+        <place>
+            <id>P2</id>
+            <x>-453</x>
+            <y>-84</y>
+            <label>P2</label>
+            <tokens>0</tokens>
+            <isStatic>false</isStatic>
+        </place>
+        <place>
+            <id>P3</id>
+            <x>-575</x>
+            <y>-173</y>
+            <label>P3</label>
             <tokens>3</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P4</id>
-            <x>-434</x>
-            <y>-66</y>
+            <x>-625</x>
+            <y>103</y>
             <label>P4</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P5</id>
-            <x>-626</x>
-            <y>-67</y>
+            <x>-446</x>
+            <y>103</y>
             <label>P5</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P6</id>
-            <x>-253</x>
-            <y>-66</y>
+            <x>-572</x>
+            <y>26</y>
             <label>P6</label>
-            <tokens>0</tokens>
+            <tokens>3</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P7</id>
-            <x>-29</x>
-            <y>-209</y>
+            <x>-620</x>
+            <y>356</y>
             <label>P7</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P8</id>
-            <x>-102</x>
-            <y>-273</y>
+            <x>-442</x>
+            <y>356</y>
             <label>P8</label>
-            <tokens>30</tokens>
-            <isStatic>false</isStatic>
-        </place>
-        <place>
-            <id>P9</id>
-            <x>348</x>
-            <y>-211</y>
-            <label>P9</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
+            <id>P9</id>
+            <x>-560</x>
+            <y>269</y>
+            <label>P9</label>
+            <tokens>3</tokens>
+            <isStatic>false</isStatic>
+        </place>
+        <place>
             <id>P10</id>
-            <x>602</x>
-            <y>-344</y>
+            <x>-139</x>
+            <y>-86</y>
             <label>P10</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P11</id>
-            <x>673</x>
-            <y>-190</y>
+            <x>-509</x>
+            <y>-371</y>
             <label>P11</label>
-            <tokens>1</tokens>
+            <tokens>60</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P12</id>
-            <x>603</x>
-            <y>-86</y>
+            <x>-719</x>
+            <y>-374</y>
             <label>P12</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P13</id>
-            <x>813</x>
-            <y>-281</y>
+            <x>-619</x>
+            <y>-295</y>
             <label>P13</label>
-            <tokens>0</tokens>
+            <tokens>1</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P14</id>
-            <x>801</x>
-            <y>-85</y>
+            <x>65</x>
+            <y>-225</y>
             <label>P14</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P15</id>
-            <x>-170</x>
-            <y>231</y>
+            <x>-21</x>
+            <y>-310</y>
             <label>P15</label>
             <tokens>30</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P16</id>
-            <x>-77</x>
-            <y>193</y>
+            <x>57</x>
+            <y>197</y>
             <label>P16</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P17</id>
-            <x>187</x>
-            <y>316</y>
+            <x>218</x>
+            <y>197</y>
             <label>P17</label>
-            <tokens>1</tokens>
+            <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P18</id>
-            <x>82</x>
-            <y>194</y>
+            <x>346</x>
+            <y>197</y>
             <label>P18</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P19</id>
-            <x>225</x>
-            <y>194</y>
+            <x>478</x>
+            <y>198</y>
             <label>P19</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
+            <id>P20</id>
+            <x>298</x>
+            <y>330</y>
+            <label>P20</label>
+            <tokens>1</tokens>
+            <isStatic>false</isStatic>
+        </place>
+        <place>
             <id>P21</id>
-            <x>-474</x>
-            <y>-371</y>
+            <x>-42</x>
+            <y>280</y>
             <label>P21</label>
-            <tokens>60</tokens>
+            <tokens>30</tokens>
+            <isStatic>false</isStatic>
+        </place>
+        <place>
+            <id>P22</id>
+            <x>346</x>
+            <y>-223</y>
+            <label>P22</label>
+            <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P23</id>
-            <x>-713</x>
-            <y>-373</y>
+            <x>508</x>
+            <y>-337</y>
             <label>P23</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P24</id>
-            <x>-579</x>
-            <y>-287</y>
+            <x>690</x>
+            <y>-335</y>
             <label>P24</label>
-            <tokens>1</tokens>
+            <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
         <place>
             <id>P25</id>
-            <x>361</x>
-            <y>195</y>
+            <x>516</x>
+            <y>-94</y>
             <label>P25</label>
             <tokens>0</tokens>
             <isStatic>false</isStatic>
         </place>
+        <place>
+            <id>P26</id>
+            <x>694</x>
+            <y>-93</y>
+            <label>P26</label>
+            <tokens>0</tokens>
+            <isStatic>false</isStatic>
+        </place>
+        <place>
+            <id>P27</id>
+            <x>605</x>
+            <y>-221</y>
+            <label>P27</label>
+            <tokens>1</tokens>
+            <isStatic>false</isStatic>
+        </place>
         <transition>
             <id>T1</id>
-            <x>-508</x>
-            <y>-67</y>
+            <x>-721</x>
+            <y>-85</y>
             <label>T1</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -190,9 +238,35 @@
             <stochasticProperties distribution="Exponential" labelVar1="Rate (λ)" labelVar2=" " var1="1.0" var2="1.0"/>
         </transition>
         <transition>
+            <id>T2</id>
+            <x>-544</x>
+            <y>-84</y>
+            <label>T2</label>
+            <timed>false</timed>
+            <rate>1.0</rate>
+            <automatic>false</automatic>
+            <informed>true</informed>
+            <enableWhenTrue>false</enableWhenTrue>
+            <guard>none</guard>
+            <stochasticProperties distribution="Exponential" labelVar1="Rate (λ)" labelVar2=" " var1="1.0" var2="1.0"/>
+        </transition>
+        <transition>
+            <id>T3</id>
+            <x>-353</x>
+            <y>-83</y>
+            <label>T3</label>
+            <timed>false</timed>
+            <rate>1.0</rate>
+            <automatic>false</automatic>
+            <informed>true</informed>
+            <enableWhenTrue>false</enableWhenTrue>
+            <guard>none</guard>
+            <stochasticProperties distribution="Exponential" labelVar1="Rate (λ)" labelVar2=" " var1="1.0" var2="1.0"/>
+        </transition>
+        <transition>
             <id>T4</id>
-            <x>-717</x>
-            <y>-69</y>
+            <x>-716</x>
+            <y>103</y>
             <label>T4</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -204,8 +278,8 @@
         </transition>
         <transition>
             <id>T5</id>
-            <x>-360</x>
-            <y>-66</y>
+            <x>-537</x>
+            <y>103</y>
             <label>T5</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -217,8 +291,8 @@
         </transition>
         <transition>
             <id>T6</id>
-            <x>-104</x>
-            <y>-209</y>
+            <x>-353</x>
+            <y>103</y>
             <label>T6</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -230,8 +304,8 @@
         </transition>
         <transition>
             <id>T7</id>
-            <x>-169</x>
-            <y>107</y>
+            <x>-713</x>
+            <y>356</y>
             <label>T7</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -243,8 +317,8 @@
         </transition>
         <transition>
             <id>T8</id>
-            <x>43</x>
-            <y>-207</y>
+            <x>-527</x>
+            <y>356</y>
             <label>T8</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -256,8 +330,8 @@
         </transition>
         <transition>
             <id>T9</id>
-            <x>417</x>
-            <y>-261</y>
+            <x>-353</x>
+            <y>356</y>
             <label>T9</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -269,8 +343,8 @@
         </transition>
         <transition>
             <id>T10</id>
-            <x>418</x>
-            <y>-155</y>
+            <x>-616</x>
+            <y>-472</y>
             <label>T10</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -282,8 +356,8 @@
         </transition>
         <transition>
             <id>T11</id>
-            <x>736</x>
-            <y>-283</y>
+            <x>-619</x>
+            <y>-372</y>
             <label>T11</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -295,8 +369,8 @@
         </transition>
         <transition>
             <id>T12</id>
-            <x>733</x>
-            <y>-86</y>
+            <x>-20</x>
+            <y>-226</y>
             <label>T12</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -308,8 +382,8 @@
         </transition>
         <transition>
             <id>T13</id>
-            <x>10</x>
-            <y>194</y>
+            <x>150</x>
+            <y>-224</y>
             <label>T13</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -321,8 +395,8 @@
         </transition>
         <transition>
             <id>T14</id>
-            <x>153</x>
-            <y>194</y>
+            <x>-10</x>
+            <y>78</y>
             <label>T14</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -334,8 +408,8 @@
         </transition>
         <transition>
             <id>T15</id>
-            <x>444</x>
-            <y>199</y>
+            <x>150</x>
+            <y>197</y>
             <label>T15</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -346,9 +420,48 @@
             <stochasticProperties distribution="Exponential" labelVar1="Rate (λ)" labelVar2=" " var1="1.0" var2="1.0"/>
         </transition>
         <transition>
+            <id>T16</id>
+            <x>284</x>
+            <y>197</y>
+            <label>T16</label>
+            <timed>false</timed>
+            <rate>1.0</rate>
+            <automatic>false</automatic>
+            <informed>true</informed>
+            <enableWhenTrue>false</enableWhenTrue>
+            <guard>none</guard>
+            <stochasticProperties distribution="Exponential" labelVar1="Rate (λ)" labelVar2=" " var1="1.0" var2="1.0"/>
+        </transition>
+        <transition>
+            <id>T17</id>
+            <x>412</x>
+            <y>197</y>
+            <label>T17</label>
+            <timed>false</timed>
+            <rate>1.0</rate>
+            <automatic>false</automatic>
+            <informed>true</informed>
+            <enableWhenTrue>false</enableWhenTrue>
+            <guard>none</guard>
+            <stochasticProperties distribution="Exponential" labelVar1="Rate (λ)" labelVar2=" " var1="1.0" var2="1.0"/>
+        </transition>
+        <transition>
+            <id>T18</id>
+            <x>551</x>
+            <y>197</y>
+            <label>T18</label>
+            <timed>false</timed>
+            <rate>1.0</rate>
+            <automatic>false</automatic>
+            <informed>true</informed>
+            <enableWhenTrue>false</enableWhenTrue>
+            <guard>none</guard>
+            <stochasticProperties distribution="Exponential" labelVar1="Rate (λ)" labelVar2=" " var1="1.0" var2="1.0"/>
+        </transition>
+        <transition>
             <id>T19</id>
-            <x>-577</x>
-            <y>-371</y>
+            <x>350</x>
+            <y>-302</y>
             <label>T19</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -360,8 +473,8 @@
         </transition>
         <transition>
             <id>T20</id>
-            <x>-588</x>
-            <y>-449</y>
+            <x>602</x>
+            <y>-336</y>
             <label>T20</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -373,8 +486,8 @@
         </transition>
         <transition>
             <id>T21</id>
-            <x>291</x>
-            <y>195</y>
+            <x>773</x>
+            <y>-335</y>
             <label>T21</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -386,8 +499,8 @@
         </transition>
         <transition>
             <id>T22</id>
-            <x>862</x>
-            <y>-82</y>
+            <x>351</x>
+            <y>-118</y>
             <label>T22</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -399,8 +512,8 @@
         </transition>
         <transition>
             <id>T23</id>
-            <x>871</x>
-            <y>-282</y>
+            <x>605</x>
+            <y>-93</y>
             <label>T23</label>
             <timed>false</timed>
             <rate>1.0</rate>
@@ -410,300 +523,47 @@
             <guard>none</guard>
             <stochasticProperties distribution="Exponential" labelVar1="Rate (λ)" labelVar2=" " var1="1.0" var2="1.0"/>
         </transition>
-        <arc>
-            <type>inhibitor</type>
-            <sourceId>P23</sourceId>
-            <destinationId>T4</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T20</sourceId>
-            <destinationId>P24</destinationId>
-            <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>-747</x>
-                <y>-451</y>
-            </breakPoint>
-            <breakPoint>
-                <x>-748</x>
-                <y>-288</y>
-            </breakPoint>
-        </arc>
+        <transition>
+            <id>T24</id>
+            <x>781</x>
+            <y>-93</y>
+            <label>T24</label>
+            <timed>false</timed>
+            <rate>1.0</rate>
+            <automatic>false</automatic>
+            <informed>true</informed>
+            <enableWhenTrue>false</enableWhenTrue>
+            <guard>none</guard>
+            <stochasticProperties distribution="Exponential" labelVar1="Rate (λ)" labelVar2=" " var1="1.0" var2="1.0"/>
+        </transition>
         <arc>
             <type>regular</type>
-            <sourceId>T20</sourceId>
-            <destinationId>P21</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P21</sourceId>
-            <destinationId>T20</destinationId>
-            <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>-474</x>
-                <y>-447</y>
-            </breakPoint>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P23</sourceId>
-            <destinationId>T20</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T19</sourceId>
-            <destinationId>P23</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>inhibitor</type>
-            <sourceId>P21</sourceId>
-            <destinationId>T19</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P24</sourceId>
-            <destinationId>T19</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P21</sourceId>
-            <destinationId>T5</destinationId>
-            <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>-473</x>
-                <y>-222</y>
-            </breakPoint>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T15</sourceId>
-            <destinationId>P21</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T8</sourceId>
-            <destinationId>P21</destinationId>
-            <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>43</x>
-                <y>-371</y>
-            </breakPoint>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T15</sourceId>
-            <destinationId>P9</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T15</sourceId>
-            <destinationId>P15</destinationId>
-            <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>301</x>
-                <y>392</y>
-            </breakPoint>
-            <breakPoint>
-                <x>-171</x>
-                <y>389</y>
-            </breakPoint>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T15</sourceId>
-            <destinationId>P17</destinationId>
-            <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>237</x>
-                <y>318</y>
-            </breakPoint>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T14</sourceId>
-            <destinationId>P19</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P18</sourceId>
-            <destinationId>T14</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T13</sourceId>
-            <destinationId>P18</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P17</sourceId>
-            <destinationId>T13</destinationId>
-            <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>-10</x>
-                <y>270</y>
-            </breakPoint>
-            <breakPoint>
-                <x>-42</x>
-                <y>235</y>
-            </breakPoint>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P16</sourceId>
-            <destinationId>T13</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P15</sourceId>
-            <destinationId>T7</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T7</sourceId>
-            <destinationId>P16</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T8</sourceId>
-            <destinationId>P8</destinationId>
-            <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>44</x>
-                <y>-272</y>
-            </breakPoint>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T12</sourceId>
-            <destinationId>P14</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P11</sourceId>
-            <destinationId>T12</destinationId>
-            <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>672</x>
-                <y>-126</y>
-            </breakPoint>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P12</sourceId>
-            <destinationId>T12</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T11</sourceId>
-            <destinationId>P13</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P10</sourceId>
-            <destinationId>T11</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P11</sourceId>
-            <destinationId>T11</destinationId>
-            <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>672</x>
-                <y>-268</y>
-            </breakPoint>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T10</sourceId>
-            <destinationId>P12</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T9</sourceId>
-            <destinationId>P10</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P9</sourceId>
-            <destinationId>T10</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P9</sourceId>
-            <destinationId>T9</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T8</sourceId>
-            <destinationId>P9</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P7</sourceId>
-            <destinationId>T8</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P8</sourceId>
-            <destinationId>T6</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T6</sourceId>
-            <destinationId>P7</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P6</sourceId>
-            <destinationId>T7</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P6</sourceId>
-            <destinationId>T6</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T5</sourceId>
+            <sourceId>T1</sourceId>
             <destinationId>P1</destinationId>
             <multiplicity>1</multiplicity>
-            <breakPoint>
-                <x>-358</x>
-                <y>-125</y>
-            </breakPoint>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>T5</sourceId>
-            <destinationId>P6</destinationId>
+            <sourceId>P1</sourceId>
+            <destinationId>T2</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T2</sourceId>
+            <destinationId>P2</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P2</sourceId>
+            <destinationId>T3</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T4</sourceId>
+            <destinationId>P4</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
@@ -714,88 +574,470 @@
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>T1</sourceId>
-            <destinationId>P1</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>T4</sourceId>
+            <sourceId>T5</sourceId>
             <destinationId>P5</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
             <sourceId>P5</sourceId>
-            <destinationId>T1</destinationId>
+            <destinationId>T6</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>T1</sourceId>
-            <destinationId>P4</destinationId>
+            <sourceId>T6</sourceId>
+            <destinationId>P6</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P6</sourceId>
+            <destinationId>T5</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T3</sourceId>
+            <destinationId>P3</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P3</sourceId>
+            <destinationId>T2</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T9</sourceId>
+            <destinationId>P9</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P9</sourceId>
+            <destinationId>T8</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T7</sourceId>
+            <destinationId>P7</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P7</sourceId>
+            <destinationId>T8</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T8</sourceId>
+            <destinationId>P8</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P8</sourceId>
+            <destinationId>T9</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T3</sourceId>
+            <destinationId>P10</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T6</sourceId>
+            <destinationId>P10</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T9</sourceId>
+            <destinationId>P10</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P11</sourceId>
+            <destinationId>T10</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>-509</x>
+                <y>-472</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>inhibitor</type>
+            <sourceId>P11</sourceId>
+            <destinationId>T11</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T11</sourceId>
+            <destinationId>P12</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P12</sourceId>
+            <destinationId>T10</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T10</sourceId>
+            <destinationId>P13</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>-777</x>
+                <y>-473</y>
+            </breakPoint>
+            <breakPoint>
+                <x>-780</x>
+                <y>-295</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P13</sourceId>
+            <destinationId>T11</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T10</sourceId>
+            <destinationId>P11</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>inhibitor</type>
+            <sourceId>P12</sourceId>
+            <destinationId>T1</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>inhibitor</type>
+            <sourceId>P12</sourceId>
+            <destinationId>T4</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>-800</x>
+                <y>55</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>inhibitor</type>
+            <sourceId>P12</sourceId>
+            <destinationId>T7</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>-861</x>
+                <y>141</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P11</sourceId>
+            <destinationId>T3</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P11</sourceId>
+            <destinationId>T6</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>-271</x>
+                <y>-198</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P11</sourceId>
+            <destinationId>T9</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>-222</x>
+                <y>-221</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T12</sourceId>
+            <destinationId>P14</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P14</sourceId>
+            <destinationId>T13</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T13</sourceId>
+            <destinationId>P15</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>151</x>
+                <y>-310</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P15</sourceId>
+            <destinationId>T12</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
             <sourceId>T14</sourceId>
+            <destinationId>P16</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P16</sourceId>
+            <destinationId>T15</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T15</sourceId>
             <destinationId>P17</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
+            <sourceId>P17</sourceId>
+            <destinationId>T16</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T16</sourceId>
+            <destinationId>P18</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P18</sourceId>
+            <destinationId>T17</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T17</sourceId>
+            <destinationId>P19</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
             <sourceId>P19</sourceId>
+            <destinationId>T18</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T18</sourceId>
+            <destinationId>P21</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>435</x>
+                <y>431</y>
+            </breakPoint>
+            <breakPoint>
+                <x>12</x>
+                <y>429</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P21</sourceId>
+            <destinationId>T14</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P20</sourceId>
+            <destinationId>T15</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>147</x>
+                <y>330</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T16</sourceId>
+            <destinationId>P20</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>283</x>
+                <y>265</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P20</sourceId>
+            <destinationId>T17</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>386</x>
+                <y>279</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T18</sourceId>
+            <destinationId>P20</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>393</x>
+                <y>329</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P10</sourceId>
+            <destinationId>T12</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P10</sourceId>
+            <destinationId>T14</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P22</sourceId>
+            <destinationId>T19</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P22</sourceId>
+            <destinationId>T22</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T19</sourceId>
+            <destinationId>P23</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P23</sourceId>
+            <destinationId>T20</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T20</sourceId>
+            <destinationId>P24</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P24</sourceId>
             <destinationId>T21</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>T21</sourceId>
+            <sourceId>T22</sourceId>
             <destinationId>P25</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
             <sourceId>P25</sourceId>
-            <destinationId>T15</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P17</sourceId>
-            <destinationId>T21</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P14</sourceId>
-            <destinationId>T22</destinationId>
-            <multiplicity>1</multiplicity>
-        </arc>
-        <arc>
-            <type>regular</type>
-            <sourceId>P13</sourceId>
             <destinationId>T23</destinationId>
             <multiplicity>1</multiplicity>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>T22</sourceId>
+            <sourceId>T23</sourceId>
+            <destinationId>P26</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P26</sourceId>
+            <destinationId>T24</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P27</sourceId>
+            <destinationId>T20</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>P27</sourceId>
+            <destinationId>T23</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T21</sourceId>
+            <destinationId>P27</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T24</sourceId>
+            <destinationId>P27</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T21</sourceId>
             <destinationId>P11</destinationId>
             <multiplicity>1</multiplicity>
             <breakPoint>
-                <x>864</x>
-                <y>-138</y>
+                <x>772</x>
+                <y>-446</y>
             </breakPoint>
         </arc>
         <arc>
             <type>regular</type>
-            <sourceId>T23</sourceId>
+            <sourceId>T24</sourceId>
             <destinationId>P11</destinationId>
             <multiplicity>1</multiplicity>
             <breakPoint>
-                <x>864</x>
-                <y>-228</y>
+                <x>832</x>
+                <y>-93</y>
+            </breakPoint>
+            <breakPoint>
+                <x>837</x>
+                <y>-478</y>
+            </breakPoint>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T13</sourceId>
+            <destinationId>P22</destinationId>
+            <multiplicity>1</multiplicity>
+        </arc>
+        <arc>
+            <type>regular</type>
+            <sourceId>T18</sourceId>
+            <destinationId>P22</destinationId>
+            <multiplicity>1</multiplicity>
+            <breakPoint>
+                <x>201</x>
+                <y>-83</y>
             </breakPoint>
         </arc>
     </subnet>

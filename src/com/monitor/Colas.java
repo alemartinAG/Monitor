@@ -9,14 +9,14 @@ class Colas {
     private ArrayList<Semaphore> semaphoreList;
 
     /**
-     * Creo una cola para cada thread, se utiliza un
+     * Creo una cola para cada transicion, se utiliza un
      * semáforo inicializado en 0 para cada cola
      *
-     * @param threads cantidad de threads para la red
+     * @param transitions cantidad de colas para la red
      */
-    Colas(int threads){
+    Colas(int transitions){
         semaphoreList = new ArrayList<>();
-        nQueues = threads;
+        nQueues = transitions;
 
         for(int i=0; i<nQueues; i++){
             semaphoreList.add(new Semaphore(0));

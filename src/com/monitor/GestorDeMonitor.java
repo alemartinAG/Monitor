@@ -11,8 +11,9 @@ import java.util.Arrays;
 
 public class GestorDeMonitor {
 
-    //private static final String POLPATH = "res/politica_piso-abajo.txt";
-    private static final String POLPATH = "res/politica_random.txt";
+    private static final String FLR_POLPATH = "res/politica_piso-abajo.txt";
+    private static final String RDN_POLPATH = "res/politica_random.txt";
+    private static final String EXT_POLPATH = "res/politica_salida.txt";
 
     private static final long NOWAIT = 0;
 
@@ -36,7 +37,7 @@ public class GestorDeMonitor {
 
         mutex = new Mutex();
         petriNet = net;
-        policy = new Politica(POLPATH);
+        policy = new Politica(EXT_POLPATH);
         queues = new Colas(petriNet.getTransitionsCount());
         transitionsLeft = limit;
         transitionsTotal = limit;

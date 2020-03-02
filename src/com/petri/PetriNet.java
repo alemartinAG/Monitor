@@ -30,6 +30,7 @@ public class PetriNet {
     public static final int INITIAL = 0;
     public static final int CURRENT = 1;
 
+    //private static final String PETRI = "res/petri.html"; // matrices file's path
     private static final String PETRI = "res/petri.html"; // matrices file's path
     private static final String TIMED = "res/timed-transitions.txt";
 
