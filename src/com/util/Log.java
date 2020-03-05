@@ -37,6 +37,7 @@ public class Log {
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
         try {
+
             bufferedWriter.write(event);
             bufferedWriter.newLine();
             bufferedWriter.flush();
